@@ -37,7 +37,6 @@ import com.google.inject.Injector;
  *
  */
 public abstract class AbstractReadAndSerializeTest {
-    protected Injector injector;
     protected String resourceRoot;
     @Inject
     protected ResourceSet resourceSet;
@@ -46,13 +45,14 @@ public abstract class AbstractReadAndSerializeTest {
 
     @BeforeClass
     public static void init_internal() {
-        StandaloneSetup setup = new StandaloneSetup();
-        setup.setPlatformUri("..");
+        new StandaloneSetup().setPlatformUri("..");
     }
 
-    public AbstractReadAndSerializeTest(ISetup setup, String resourceRoot) {
-        injector = setup.createInjectorAndDoEMFRegistration();
-        injector.injectMembers(this);
+    public AbstractReadAndSerializeTest() {
+        this ("classpath://");
+    }
+
+    public AbstractReadAndSerializeTest(String resourceRoot) {
         this.resourceRoot = resourceRoot;
     }
 
@@ -68,10 +68,9 @@ public abstract class AbstractReadAndSerializeTest {
     }
 
     protected String loadFileContents(String rootPath, String filename) {
-        ResourceSet rs = injector.getInstance(ResourceSet.class);
         URI uri = URI.createURI(resourceRoot + "/" + filename);
         try {
-            InputStream is = rs.getURIConverter().createInputStream(uri);
+            InputStream is = resourceSet.getURIConverter().createInputStream(uri);
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             int i;
             while ((i = is.read()) >= 0) {
@@ -111,7 +110,9 @@ public abstract class AbstractReadAndSerializeTest {
     /**
      * Returns the expected type of the root element of the given resource.
      */
-    protected abstract Class<? extends EObject> getRootObjectType(URI uri);
+    protected Class<? extends EObject> getRootObjectType(URI uri) {
+    	return null;
+    }
 
     public void setResourceRoot(String resourceRoot) {
         this.resourceRoot = resourceRoot;
@@ -141,7 +142,10 @@ public abstract class AbstractReadAndSerializeTest {
 
         assertFalse(resource.getContents().isEmpty());
         EObject o = resource.getContents().get(0);
-        assertTrue(clazz.isInstance(o));
+        // assure that the root element is of the expected type
+        if (clazz != null) {
+        	assertTrue(clazz.isInstance(o));
+        }
         EcoreUtil.resolveAll(resource);
         assertAllCrossReferencesResolvable(resource.getContents().get(0));
         return (T) o;
