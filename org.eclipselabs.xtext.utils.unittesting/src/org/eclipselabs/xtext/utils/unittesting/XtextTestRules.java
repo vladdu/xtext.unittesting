@@ -109,8 +109,9 @@ public class XtextTestRules implements MethodRule {
 	
 	/**
 	 * Parsed successfully, but validation error occurs containing <code>substring</code>.
+	 * Other errors or warnings will be ignored.
 	 */
-	public void expectError (String substring) {
+	public void expectContainsError (String substring) {
 		expectValidationException();
 		
 		final Matcher<String> substringMatcher = containsString(substring);
@@ -137,8 +138,9 @@ public class XtextTestRules implements MethodRule {
 	
 	/**
 	 * Parsed successfully, but validation warning occurs containing <code>substring</code>.
+	 * Other errors or warnings will be ignored.
 	 */
-	public void expectWarning (String substring) {
+	public void expectContainsWarning (String substring) {
 		expectValidationException();
 		
 		final Matcher<String> substringMatcher = containsString(substring);
