@@ -53,6 +53,7 @@ public abstract class AbstractReadAndSerializeTest {
     public AbstractReadAndSerializeTest(ISetup setup, String resourceRoot) {
         injector = setup.createInjectorAndDoEMFRegistration();
         injector.injectMembers(this);
+        this.resourceRoot = resourceRoot;
     }
 
     protected void testFile(String fileToTest, String... referencedResources) {
