@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.mwe.utils.StandaloneSetup;
+import org.eclipse.xtext.GrammarUtil;
+import org.eclipse.xtext.IGrammarAccess;
 import org.eclipse.xtext.ParserRule;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.SyntaxErrorMessage;
@@ -28,6 +30,9 @@ import com.google.inject.Inject;
 public class AbstractParserRulesTest {
     @Inject
     private IParser parser;
+    
+    @Inject
+    private IGrammarAccess grammar;
 
     @BeforeClass
     public static void init() {
@@ -42,10 +47,9 @@ public class AbstractParserRulesTest {
     protected List<SyntaxErrorMessage> testParserRule(String ruleName,
             String textToParse, boolean errorsExpected) {
     	
-    	// TODO: Find Parser Rule by ruleName
-    	ParserRule parserRule = null;
-        IParseResult result = parser.parse(parserRule, new StringReader(
-                textToParse));
+    	ParserRule parserRule = (ParserRule) GrammarUtil.findRuleForName(grammar.getGrammar(), ruleName);
+        
+    	IParseResult result = parser.parse(parserRule, new StringReader(textToParse));
         
         ArrayList<SyntaxErrorMessage> errors = Lists.newArrayList();
         ArrayList<String> errMsg = Lists.newArrayList();
