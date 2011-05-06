@@ -8,9 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.mwe.utils.StandaloneSetup;
+import org.eclipse.xtext.ParserRule;
+import org.eclipse.xtext.nodemodel.INode;
+import org.eclipse.xtext.nodemodel.SyntaxErrorMessage;
 import org.eclipse.xtext.parser.IParseResult;
-import org.eclipse.xtext.parser.antlr.IAntlrParser;
-import org.eclipse.xtext.parsetree.SyntaxError;
+import org.eclipse.xtext.parser.IParser;
 import org.junit.BeforeClass;
 
 import com.google.common.base.Predicate;
@@ -25,7 +27,7 @@ import com.google.inject.Inject;
  */
 public class AbstractParserRulesTest {
     @Inject
-    private IAntlrParser parser;
+    private IParser parser;
 
     @BeforeClass
     public static void init() {
@@ -37,34 +39,42 @@ public class AbstractParserRulesTest {
         testParserRule(ruleName, textToParse, false);
     }
 
-    protected List<SyntaxError> testParserRule(String ruleName,
+    protected List<SyntaxErrorMessage> testParserRule(String ruleName,
             String textToParse, boolean errorsExpected) {
-        IParseResult result = parser.parse(ruleName, new StringReader(
+    	
+    	// TODO: Find Parser Rule by ruleName
+    	ParserRule parserRule = null;
+        IParseResult result = parser.parse(parserRule, new StringReader(
                 textToParse));
+        
+        ArrayList<SyntaxErrorMessage> errors = Lists.newArrayList();
         ArrayList<String> errMsg = Lists.newArrayList();
-        for (SyntaxError err : result.getParseErrors()) {
-            errMsg.add(err.getMessage());
+        
+        for (INode err : result.getSyntaxErrors()) {
+        	errors.add(err.getSyntaxErrorMessage());
+        	errMsg.add(err.getSyntaxErrorMessage().getMessage());
         }
-        if (!errorsExpected && !result.getParseErrors().isEmpty()) {
+        
+        if (!errorsExpected && !errors.isEmpty()) {
             fail("Parsing of text '" + textToParse + "' for rule '" + ruleName
                     + "' failed with errors: " + errMsg);
         }
-        if (errorsExpected && result.getParseErrors().isEmpty()) {
+        if (errorsExpected && errors.isEmpty()) {
             fail("Parsing of text '" + textToParse + "' for rule '" + ruleName
                     + "' was expected to have parse errors.");
         }
 
-        return result.getParseErrors();
+        return errors;
     }
 
     protected void testParserRule(String ruleName, String textToParse,
             String... expectedErrors) {
-        List<SyntaxError> errors = testParserRule(ruleName, textToParse, true);
+        List<SyntaxErrorMessage> errors = testParserRule(ruleName, textToParse, true);
         List<String> expectedErrorMessages = Lists.newArrayList(expectedErrors);
 
         assertEquals("Number of errors", expectedErrors.length, errors.size());
 
-        for (final SyntaxError err : errors) {
+        for (final SyntaxErrorMessage err : errors) {
             if (!Iterables.any(expectedErrorMessages, new Predicate<String>() {
                 public boolean apply(String input) {
                     return err.getMessage().contains(input);
