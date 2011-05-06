@@ -85,7 +85,7 @@ public class XtextTestRules implements MethodRule {
 	public void expectNoErrors () {
 		expect(new TypeSafeMatcher<ValidationFailedException>() {
 			public void describeTo(Description description) {
-				description.appendText("exception no errors");
+				description.appendText("if any exception, then 'ValidationFailedException', but with no errors");
 			}
 		
 			@Override
