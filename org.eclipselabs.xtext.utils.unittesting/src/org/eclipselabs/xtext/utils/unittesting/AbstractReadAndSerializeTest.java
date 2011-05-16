@@ -140,7 +140,7 @@ public abstract class AbstractReadAndSerializeTest {
             fail("Resource has " + resource.getErrors().size() + " errors.");
         }
 
-        assertFalse(resource.getContents().isEmpty());
+        assertFalse("Resource has no content", resource.getContents().isEmpty());
         EObject o = resource.getContents().get(0);
         // assure that the root element is of the expected type
         if (clazz != null) {

@@ -73,9 +73,11 @@ public class XtextTestRules implements MethodRule {
 				Assert.assertThat(e, fMatcher);
 				return;
 			}
-			if (fMatcher != null)
+			
+			if (fMatcher != null && _validationExceptionExpectedRuleAdded) {
 				throw new AssertionError("Expected test to throw "
 						+ StringDescription.toString(fMatcher));
+			}
 		}
 	}
 	
