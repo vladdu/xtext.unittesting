@@ -207,7 +207,7 @@ public class FluentIssueCollection implements Iterable<Issue>{
 			} 
 		}
 		if ( res.getIssueCount() == 0 ) {
-			res.addMessage("nothing found under a "+cls.getName()+" named '"+name+"'");
+			res.addMessage("did not find issues under a "+cls.getName()+" named '"+name+"'");
 		}
 		return res;
 	}
