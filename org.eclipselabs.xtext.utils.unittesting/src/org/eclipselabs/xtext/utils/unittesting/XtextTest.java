@@ -41,6 +41,8 @@ import org.eclipse.xtext.parser.antlr.ITokenDefProvider;
 import org.eclipse.xtext.parser.antlr.Lexer;
 import org.eclipse.xtext.parser.antlr.XtextTokenStream;
 import org.eclipse.xtext.resource.IResourceServiceProvider;
+import org.eclipse.xtext.resource.SaveOptions;
+import org.eclipse.xtext.resource.SaveOptions.Builder;
 import org.eclipse.xtext.util.EmfFormatter;
 import org.eclipse.xtext.util.Pair;
 import org.eclipse.xtext.util.Tuples;
@@ -56,20 +58,28 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
 /**
- * Base class for testing that parsing of DSL files succeed without errors and
- * serialization of the file matches the original content.
+ * <p>Base class for testing Xtext-based DSLs including validation, serialization, formatting, e.g.</p>
+ * 
+ * <p>{@see XtextTest} offers integration testing of model files (load, validate, serialize, compare)
+ * as well as very specific unit-style testing for terminals, keywords and parser rules.</p>
  *
- * @author Karsten Thoms - Initial Contribution and API
+ * @author Karsten Thoms
  * @author Lars Corneliussen
- *
+ * @author Markus Völter
+ * @author Alexander Nittka
+ * 
  */
 public abstract class XtextTest {
     
 	protected String resourceRoot;
 	
+	/* STATE for #testFile. TO BE initialized in #before */
 	protected FluentIssueCollection issues;
-	private Set<Issue> assertedIssues = new HashSet<Issue>();
-    
+	private Set<Issue> assertedIssues;
+	private boolean compareSerializedModelToInputFile;
+	private boolean formatOnSerialize;
+    /* END STATE for #testFile */
+	
     private static Logger LOGGER = Logger.getLogger(XtextTest.class);
     
     @Inject
@@ -107,14 +117,28 @@ public abstract class XtextTest {
     @Before
     public void before() {
     	issues = null;
-    	resetAssertedIssues();
+    	assertedIssues = new HashSet<Issue>();
+    	compareSerializedModelToInputFile = true;
+    	formatOnSerialize = true;
+    }
+    
+    private void ensureIsBeforeTestFile(){
+    	if (issues != null) {
+    		fail("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run BEFORE 'testFile' is executed!");
+    	}
+    }
+    
+    private void ensureIsAfterTestFile(){
+    	if (issues == null) {
+    		fail("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run AFTER 'testFile' is executed!");
+    	}
     }
     
     @After
     public void after() {
         if (issues != null) {
         	dumpUnassertedIssues();
-        	assertConstraints("Found unasserted errors", issues.except(assertedIssues).errorsOnly().sizeIs(0));
+        	Assert.assertTrue("found unasserted issues " + issues.except(assertedIssues).getSummary(), issues.except(assertedIssues).getIssues().size() == 0);
         }
     }
     
@@ -131,9 +155,12 @@ public abstract class XtextTest {
         Pair<String,FluentIssueCollection> result = loadAndSaveModule(resourceRoot, fileToTest);
         
         String serialized = result.getFirst();
-        String expected = loadFileContents(resourceRoot, fileToTest);
-        // Remove trailing whitespace, see Bug#320074
-        assertEquals(expected.trim(), serialized);
+        
+        if (compareSerializedModelToInputFile) {
+	        String expected = loadFileContents(resourceRoot, fileToTest);
+	        // Remove trailing whitespace, see Bug#320074
+	        assertEquals(expected.trim(), serialized);
+        }
         
         return issues = result.getSecond();
     }
@@ -288,7 +315,13 @@ public abstract class XtextTest {
 
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         try {
-            m.eResource().save(bos, null);
+        	Builder builder = SaveOptions.newBuilder();
+        	if (formatOnSerialize) {
+        		builder.format();
+        	}
+			SaveOptions s = builder.getOptions();
+        	
+            m.eResource().save(bos, s.toOptionsMap());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -363,25 +396,54 @@ public abstract class XtextTest {
 		assertedIssues.clear();
 	}
     
-    protected void assertNoErrors(){
-    	assertConstraints(issues.errorsOnly().sizeIs(0));
+    /**
+     * If called prior to #testFile, serialization will be performed, 
+     * but the result is not expected to exactly match the input file.
+     */
+    protected void ignoreSerializationDifferences(){
+    	ensureIsBeforeTestFile();
+    	
+    	compareSerializedModelToInputFile = false;
     }
     
-    protected void assertNoIssues(){
-    	assertConstraints(issues.sizeIs(0));
+    /**
+     * Serialization will occur without formatting, hence the
+     * input model must not comply to formatting rules in order
+     * to succeed.
+     */
+    protected void ignoreFormattingDifferences(){
+    	ensureIsBeforeTestFile();
+    	
+    	formatOnSerialize = false;
+    }
+    
+    /**
+     * If called after to #testFile, the test wont fail for unasserted warnings.
+     */
+    protected void ignoreUnassertedWarnings(){
+    	ensureIsAfterTestFile();
+    	
+    	// just treat the warnings left as asserted
+    	assertedIssues.addAll(issues.warningsOnly().except(assertedIssues).getIssues());
     }
 	
 	protected void assertConstraints( FluentIssueCollection coll, String msg ) {
+		ensureIsAfterTestFile();
+		
 		assertedIssues.addAll(coll.getIssues());
 		Assert.assertTrue("failed "+msg+coll.getMessageString(), coll.evaluate() );
 	}
 	
 	protected void assertConstraints( FluentIssueCollection coll) {
+		ensureIsAfterTestFile();
+		
 		assertedIssues.addAll(coll.getIssues());
 		Assert.assertTrue("<no id> failed"+coll.getMessageString(), coll.evaluate() );
 	}
 	
 	protected void assertConstraints( String constraintID, FluentIssueCollection coll) {
+		ensureIsAfterTestFile();
+		
 		assertedIssues.addAll(coll.getIssues());
 		Assert.assertTrue(constraintID+" failed"+coll.getMessageString(), coll.evaluate() );
 	}

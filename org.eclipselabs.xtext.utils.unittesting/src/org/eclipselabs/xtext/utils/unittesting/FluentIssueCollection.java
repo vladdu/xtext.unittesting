@@ -1,6 +1,7 @@
 package org.eclipselabs.xtext.utils.unittesting;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -13,6 +14,8 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.validation.Issue;
+
+import com.google.common.collect.Iterables;
 
 import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.ancestor;
 import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.eString;
@@ -124,9 +127,21 @@ public class FluentIssueCollection implements Iterable<Issue>{
 	}
 
 	public FluentIssueCollection errorsOnly() {
+		Severity severity = Severity.ERROR;
+		
+		return withSeverity(severity);
+	}
+	
+	public FluentIssueCollection warningsOnly() {
+		Severity severity = Severity.WARNING;
+		
+		return withSeverity(severity);
+	}
+
+	public FluentIssueCollection withSeverity(Severity... severities) {
 		FluentIssueCollection res = new FluentIssueCollection(resource, messages);
 		for (Issue i: issues) {
-			if ( i.getSeverity() == Severity.ERROR ) {
+			if ( Iterables.contains(Arrays.asList(severities), i.getSeverity()) ) {
 				res.addIssue( i );
 			}
 		}
@@ -311,10 +326,26 @@ public class FluentIssueCollection implements Iterable<Issue>{
 		}
 	}
 	
+	public String getSummary() {
+		if (issues.size() == 0)
+			return "No issues";
+		
+		StringBuffer sb = new StringBuffer();
+		sb.append("Issues:");
+		for (Issue i : issues) {
+			sb.append("\n  - "+ getIssueSummary(resource, i));
+		}
+		return sb.toString();
+	}
+	
 	public static void dumpIssue(Resource resource, Issue issue) {
+		LOGGER.debug( getIssueSummary(resource, issue));
+	}
+	
+	public static String getIssueSummary(Resource resource, Issue issue) {
 		EObject eObject =  resource.getEObject(issue.getUriToProblem().fragment());
 		EClass cls = eObject.eClass();
-		LOGGER.debug( issue.getSeverity() + " at " + cls.getName()+"( line "+issue.getLineNumber()+"): " +issue.getMessage());
+		return issue.getSeverity() + " at " + cls.getName()+"( line "+issue.getLineNumber()+"): " +issue.getMessage();
 	}
 
 	public Iterator<Issue> iterator() {
