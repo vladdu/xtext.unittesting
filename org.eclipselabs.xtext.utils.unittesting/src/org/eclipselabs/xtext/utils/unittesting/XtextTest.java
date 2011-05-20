@@ -79,6 +79,7 @@ public abstract class XtextTest {
 	private Set<Issue> assertedIssues;
 	private boolean compareSerializedModelToInputFile;
 	private boolean formatOnSerialize;
+	private boolean failOnParserWarnings;
     /* END STATE for #testFile */
 	
     private static Logger LOGGER = Logger.getLogger(XtextTest.class);
@@ -121,17 +122,18 @@ public abstract class XtextTest {
     	assertedIssues = new HashSet<Issue>();
     	compareSerializedModelToInputFile = true;
     	formatOnSerialize = true;
+    	failOnParserWarnings = true;
     }
     
     private void ensureIsBeforeTestFile(){
     	if (issues != null) {
-    		fail("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run BEFORE 'testFile' is executed!");
+    		throw new RuntimeException("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run BEFORE 'testFile' is executed!");
     	}
     }
     
     private void ensureIsAfterTestFile(){
     	if (issues == null) {
-    		fail("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run AFTER 'testFile' is executed!");
+    		throw new RuntimeException("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run AFTER 'testFile' is executed!");
     	}
     }
     
@@ -139,7 +141,9 @@ public abstract class XtextTest {
     public void after() {
         if (issues != null) {
         	dumpUnassertedIssues();
-        	Assert.assertTrue("found unasserted issues " + issues.except(assertedIssues).getSummary(), issues.except(assertedIssues).getIssues().size() == 0);
+        	if (issues.except(assertedIssues).getIssues().size() != 0) {
+        		Assert.fail("\n\nfound unasserted issues " + issues.except(assertedIssues).getSummary() + "\n\n");
+        	}
         }
     }
     
@@ -176,7 +180,7 @@ public abstract class XtextTest {
     	ParserRule parserRule = (ParserRule) GrammarUtil.findRuleForName(grammar.getGrammar(), ruleName);
         
     	if (parserRule == null){
-    		fail("Could not find ParserRule " + ruleName);
+    		fail("\n\nCould not find ParserRule " + ruleName + "\n\n");
     	}
     	
     	IParseResult result = parser.parse(parserRule, new StringReader(textToParse));
@@ -190,12 +194,12 @@ public abstract class XtextTest {
         }
         
         if (!errorsExpected && !errors.isEmpty()) {
-            fail("Parsing of text '" + textToParse + "' for rule '" + ruleName
-                    + "' failed with errors: " + errMsg);
+            fail("\n\nParsing of text '" + textToParse + "' for rule '" + ruleName
+                    + "' failed with errors: " + errMsg + "\n\n");
         }
         if (errorsExpected && errors.isEmpty()) {
-            fail("Parsing of text '" + textToParse + "' for rule '" + ruleName
-                    + "' was expected to have parse errors.");
+            fail("\n\nParsing of text '" + textToParse + "' for rule '" + ruleName
+                    + "' was expected to have parse errors.\n\n");
         }
 
         return errors;
@@ -208,6 +212,7 @@ public abstract class XtextTest {
         Set<String> matchingSubstrings = new HashSet<String>();
         Set<String> assertedErrors = new HashSet<String>();
         
+        boolean hadError = false;
         for(final SyntaxErrorMessage err : errors){
         	boolean hadMatch = false;
         	for(final String substring : expectedErrorSubstrings) {
@@ -218,9 +223,7 @@ public abstract class XtextTest {
             	}
         	}
         	
-        	if (hadMatch) {
-        		assertedErrors.add(err.getMessage());
-        	}
+        	assertedErrors.add(err.getMessage());
         }
     
         StringBuilder error = new StringBuilder();
@@ -232,6 +235,7 @@ public abstract class XtextTest {
 				}
 			}
         	error.append("\n");
+        	hadError = true;
         }
         
         if (assertedErrors.size() != errors.size()) {
@@ -244,7 +248,7 @@ public abstract class XtextTest {
         }
         
         String failMessage = error.toString();
-        if (!failMessage.equals("")) {
+        if (hadError || (!failMessage.equals("") && failOnParserWarnings)) {
         	fail("\n\n" + failMessage + "\n\n");
         }
     }
@@ -380,10 +384,18 @@ public abstract class XtextTest {
             throw new RuntimeException(e);
         }
         
+        StringBuilder errors = new StringBuilder();
         if (!resource.getWarnings().isEmpty()) {
         	LOGGER.error("Resource " + uri.toString() + " has warnings:");
             for (Resource.Diagnostic issue : resource.getWarnings()) {
             	LOGGER.error(issue.getLine() + ": " + issue.getMessage());
+            }
+            if (failOnParserWarnings) {
+	            errors.append("Resource as warnings:");
+	            for (Resource.Diagnostic issue : resource.getWarnings()) {
+	            	errors.append("\n  - " + issue.getLine() + ": " + issue.getMessage());
+	            }
+	            errors.append("/n");
             }
         }
         
@@ -392,7 +404,16 @@ public abstract class XtextTest {
             for (Resource.Diagnostic issue : resource.getErrors()) {
             	LOGGER.error("    " + issue.getLine() + ": " + issue.getMessage());
             }
-            fail("Resource has " + resource.getErrors().size() + " errors.");
+            
+            errors.append("Resource as errors:");
+            for (Resource.Diagnostic issue : resource.getErrors()) {
+            	errors.append("\n  - " + issue.getLine() + ": " + issue.getMessage());
+            }
+        }
+        
+        String failMessage = errors.toString();
+        if (!failMessage.equals("")){
+        	fail("\n\n" + failMessage + "\n");
         }
 
         assertFalse("Resource has no content", resource.getContents().isEmpty());
@@ -435,6 +456,16 @@ public abstract class XtextTest {
     	ensureIsBeforeTestFile();
     	
     	compareSerializedModelToInputFile = false;
+    }
+    
+    /**
+     * If called prior to #testFile, parser warnings will be ignored.
+     * Errors will still be reported, though.
+     */
+    protected void ignoreParserWarnings(){
+    	ensureIsBeforeTestFile();
+    	
+    	failOnParserWarnings = false;
     }
     
     /**
