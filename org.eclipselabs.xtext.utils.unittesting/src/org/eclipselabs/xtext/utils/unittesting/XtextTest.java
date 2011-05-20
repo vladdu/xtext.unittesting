@@ -149,7 +149,6 @@ public abstract class XtextTest {
     
     protected FluentIssueCollection testFile(String fileToTest, String... referencedResources) {
     	
-    	LOGGER.info("------------------------------------------");
 		LOGGER.info("testing " + fileToTest + " in test method " +this.getClass().getSimpleName() + "." + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName());
 		
         for (String referencedResource : referencedResources) {
@@ -168,6 +167,11 @@ public abstract class XtextTest {
         }
         
         return issues = result.getSecond();
+    }
+    
+    protected FluentIssueCollection testFileNoSerializer( String fileToTest, String... referencedResources ) {
+        ignoreSerializationDifferences();
+        return testFile(fileToTest, referencedResources);
     }
     
     protected void testParserRule(String ruleName, String textToParse) {
