@@ -52,6 +52,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -169,7 +170,7 @@ public abstract class XtextTest {
         testParserRule(ruleName, textToParse, false);
     }
 
-    protected List<SyntaxErrorMessage> testParserRule(String textToParse, String ruleName,
+    private List<SyntaxErrorMessage> testParserRule(String textToParse, String ruleName,
             boolean errorsExpected) {
     	
     	ParserRule parserRule = (ParserRule) GrammarUtil.findRuleForName(grammar.getGrammar(), ruleName);
@@ -200,21 +201,51 @@ public abstract class XtextTest {
         return errors;
     }
 
-    protected void testParserRule(String textToParse, String ruleName, 
-            String... expectedErrors) {
+    protected void testParserRuleErrors(String textToParse, String ruleName, 
+            String... expectedErrorSubstrings) {
         List<SyntaxErrorMessage> errors = testParserRule(textToParse, ruleName, true);
-        List<String> expectedErrorMessages = Lists.newArrayList(expectedErrors);
-
-        assertEquals("Number of errors", expectedErrors.length, errors.size());
-
-        for (final SyntaxErrorMessage err : errors) {
-            if (!Iterables.any(expectedErrorMessages, new Predicate<String>() {
-                public boolean apply(String input) {
-                    return err.getMessage().contains(input);
-                }
-            })) {
-                fail("Unexpected error message: " + err.getMessage());
-            }
+        
+        Set<String> matchingSubstrings = new HashSet<String>();
+        Set<String> assertedErrors = new HashSet<String>();
+        
+        for(final SyntaxErrorMessage err : errors){
+        	boolean hadMatch = false;
+        	for(final String substring : expectedErrorSubstrings) {
+        		boolean contains = err.getMessage().contains(substring);
+            	if (contains) {
+            		hadMatch = true;
+            		matchingSubstrings.add(substring);
+            	}
+        	}
+        	
+        	if (hadMatch) {
+        		assertedErrors.add(err.getMessage());
+        	}
+        }
+    
+        StringBuilder error = new StringBuilder();
+        if (expectedErrorSubstrings.length != matchingSubstrings.size()) {
+        	error.append("Unmatched assertions:");
+        	for (String string : expectedErrorSubstrings) {
+				if (!matchingSubstrings.contains(string)){
+					error.append("\n  - any error containing '" + string + "'");
+				}
+			}
+        	error.append("\n");
+        }
+        
+        if (assertedErrors.size() != errors.size()) {
+        	error.append("Unasserted Errors:");
+        	for (SyntaxErrorMessage err : errors) {
+				if (!assertedErrors.contains(err.getMessage())){
+					error.append("\n  - " + err.getMessage());
+				}
+			}	
+        }
+        
+        String failMessage = error.toString();
+        if (!failMessage.equals("")) {
+        	fail("\n\n" + failMessage + "\n\n");
         }
     }
     
