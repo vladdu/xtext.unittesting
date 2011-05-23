@@ -442,7 +442,6 @@ public abstract class XtextTest {
         	assertTrue(clazz.isInstance(o));
         }
         EcoreUtil.resolveAll(resource);
-        assertAllCrossReferencesResolvable(resource.getContents().get(0));
         return (T) o;
     }
 
