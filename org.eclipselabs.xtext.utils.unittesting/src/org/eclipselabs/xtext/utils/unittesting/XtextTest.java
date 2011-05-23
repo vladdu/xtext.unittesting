@@ -103,12 +103,27 @@ public abstract class XtextTest {
     private ITokenDefProvider tokenDefProvider;
     
     public XtextTest() {
-        this ("classpath://");
-        
+        this ("/");
     }
 
     public XtextTest(String resourceRoot) {
-        this.resourceRoot = resourceRoot;
+    	/* Classpath resuolution is weird
+    	 * 
+    	 * For resources directly in the classpath, you need a starting slash after 'classpath:/':
+    	 *   - classpath://bla.txt
+    	 *   
+    	 * But if you wan't to point to something in a subfolder, the subfolder must
+    	 * occur directly after 'classpath:/':
+    	 *   - classpath://subfolder
+    	 *   
+    	 * A trailing slash is optional.
+    	 * */
+    	if (!resourceRoot.contains(":/")) {
+    		this.resourceRoot = "classpath:/" + resourceRoot;
+    	}
+    	else {
+    		this.resourceRoot = resourceRoot;
+    	}
     }
 
     @BeforeClass
