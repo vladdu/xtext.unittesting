@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.eclipselabs.xtext.utils.unittesting.feature"
+      label="Eclipse Labs Xtext Testing Utilities"
+      version="2.0.0.qualifier">
+
+   <description url="http://code.google.com/a/eclipselabs.org/p/xtext-utils/wiki/Unit_Testing">
+      Base test fixtures and helper classes for testing Xtext-based DSLs.
+   </description>
+
+   <copyright url="http://www.eclipse.org/legal/epl-v10.html">
+      The code is licenced under Eclipse Public License 1.0
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      Eclipse Public License 1.0
+   </license>
+
+   <url>
+      <update label="Eclipse Labs Xtext Utils Update Site" url="http://svn.codespot.com/a/eclipselabs.org/xtext-utils/updates/snapshots/"/>
+   </url>
+
+   <plugin
+         id="org.eclipselabs.xtext.utils.unittesting"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>

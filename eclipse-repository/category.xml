@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.eclipselabs.xtext.utils.unittesting.feature_2.0.0.qualifier.jar" id="org.eclipselabs.xtext.utils.unittesting.feature" version="2.0.0.qualifier">
+      <category name="eclipselabs-xtext-utils-unittesting"/>
+   </feature>
+   <category-def name="eclipselabs-xtext-utils-unittesting" label="Eclipse Labs Xtext Testing Utilities"/>
+</site>

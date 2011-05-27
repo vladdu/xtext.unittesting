@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.eclipselabs.xtext.utils</groupId>
+	<version>2.0.0-SNAPSHOT</version>
+	<artifactId>unittesting-parent</artifactId>
+	<packaging>pom</packaging>
+
+	<properties>
+		<tycho-version>0.12.0</tycho-version>
+	</properties>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>${tycho-version}</version>
+				<extensions>true</extensions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	<modules>
+		<module>org.eclipselabs.xtext.utils.unittesting</module>
+		<module>org.eclipselabs.xtext.utils.unittesting.feature</module>
+		<module>eclipse-repository</module>
+	</modules>
+	
+	<repositories>
+	
+		<repository>
+			<id>eclipse-indigo</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/eclipse/updates/3.7milestones</url>
+		</repository>
+
+		<repository>
+			<id>eclipse-helios</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/helios</url>
+		</repository>
+
+		<repository>
+			<id>xtext-2.0-nightly</id>
+			<layout>p2</layout>
+			<url>https://hudson.eclipse.org/hudson/job/Xtext-nightly-HEAD/lastSuccessfulBuild/artifact/xtext.p2.repository</url>
+		</repository>
+
+	</repositories>
+</project>
