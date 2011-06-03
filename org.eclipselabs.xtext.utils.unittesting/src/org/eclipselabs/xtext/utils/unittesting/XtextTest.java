@@ -80,6 +80,7 @@ public abstract class XtextTest {
 	private boolean compareSerializedModelToInputFile;
 	private boolean formatOnSerialize;
 	private boolean failOnParserWarnings;
+	private EObject rootElement;
     /* END STATE for #testFile */
 	
     private static Logger LOGGER = Logger.getLogger(XtextTest.class);
@@ -160,6 +161,10 @@ public abstract class XtextTest {
         		Assert.fail("\n\nfound unasserted issues " + issues.except(assertedIssues).getSummary() + "\n\n");
         	}
         }
+    }
+    
+    protected EObject getModelRool() {
+    	return rootElement;
     }
     
     protected FluentIssueCollection testFile(String fileToTest, String... referencedResources) {
@@ -359,7 +364,7 @@ public abstract class XtextTest {
 
     protected Pair<String, FluentIssueCollection> loadAndSaveModule(String rootPath, String filename) {
         URI uri = URI.createURI(resourceRoot + "/" + filename);
-        EObject m = loadModel(resourceSet, uri, getRootObjectType(uri));
+        rootElement = loadModel(resourceSet, uri, getRootObjectType(uri));
 
         Resource r = resourceSet.getResource(uri, false);
         IResourceServiceProvider provider = serviceProviderRegistry
@@ -375,7 +380,7 @@ public abstract class XtextTest {
         	}
 			SaveOptions s = builder.getOptions();
         	
-            m.eResource().save(bos, s.toOptionsMap());
+			rootElement.eResource().save(bos, s.toOptionsMap());
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
