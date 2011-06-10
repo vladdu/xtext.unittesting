@@ -18,4 +18,9 @@ public class ModelFileTest extends XtextTest {
 	public void person_no_attributes(){
 		testFile("person_no_attributes.dmodel");
 	}
+	
+	@Test
+	public void person2_extends_person(){
+		testFile("person2_extends_person.dmodel", "person_no_attributes.dmodel");
+	}
 }
