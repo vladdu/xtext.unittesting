@@ -8,7 +8,7 @@
 		<artifactId>unittesting-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<artifactId>org.eclipselabs.xtext.utils.unittesting</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
@@ -21,7 +21,7 @@
 			<version>4.8.1</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -38,25 +38,14 @@
 					<skip>true</skip>
 				</configuration>
 			</plugin>
-			<!--plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>test</id>
-						<phase>test</phase>
-						<configuration>
-							<testClassesDirectory>${project.build.outputDirectory}</testClassesDirectory>
-							<excludes>
-								<exclude>**/Abstract*</exclude>
-							</excludes>
-						</configuration>
-						<goals>
-							<goal>test</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin -->
-		</plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>sourceBundle</artifactId>
+				<version>${tycho-version}</version>
+				<configuration>
+					<sourceBundle>true</sourceBundle>
+				</configuration>
+			</plugin>
+        </plugins>
 	</build>
 </project>
