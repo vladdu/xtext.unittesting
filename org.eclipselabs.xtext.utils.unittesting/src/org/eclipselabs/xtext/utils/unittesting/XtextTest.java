@@ -183,7 +183,8 @@ public abstract class XtextTest {
         if (compareSerializedModelToInputFile) {
 	        String expected = loadFileContents(resourceRoot, fileToTest);
 	        // Remove trailing whitespace, see Bug#320074
-	        assertEquals(expected.trim(), serialized);
+	        // todo: Check if the trim really is still necessary!!
+	        assertEquals(expected.trim(), serialized.trim());
         }
         
         return issues = result.getSecond();
