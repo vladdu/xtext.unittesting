@@ -163,7 +163,7 @@ public abstract class XtextTest {
         }
     }
     
-    protected EObject getModelRool() {
+    protected EObject getModelRoot() {
     	return rootElement;
     }
     
