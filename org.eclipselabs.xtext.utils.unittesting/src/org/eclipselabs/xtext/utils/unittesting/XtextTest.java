@@ -195,8 +195,8 @@ public abstract class XtextTest {
         return testFile(fileToTest, referencedResources);
     }
     
-    protected void testParserRule(String ruleName, String textToParse) {
-        testParserRule(ruleName, textToParse, false);
+    protected void testParserRule(String textToParse, String ruleName) {
+        testParserRule(textToParse, ruleName, false);
     }
 
     private List<SyntaxErrorMessage> testParserRule(String textToParse, String ruleName,
