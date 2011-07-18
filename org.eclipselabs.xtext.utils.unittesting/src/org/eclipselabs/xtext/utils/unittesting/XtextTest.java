@@ -52,9 +52,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
@@ -66,7 +63,7 @@ import com.google.inject.Inject;
  *
  * @author Karsten Thoms
  * @author Lars Corneliussen
- * @author Markus Völter
+ * @author Markus Voelter
  * @author Alexander Nittka
  * 
  */
@@ -239,11 +236,9 @@ public abstract class XtextTest {
         
         boolean hadError = false;
         for(final SyntaxErrorMessage err : errors){
-        	boolean hadMatch = false;
         	for(final String substring : expectedErrorSubstrings) {
         		boolean contains = err.getMessage().contains(substring);
             	if (contains) {
-            		hadMatch = true;
             		matchingSubstrings.add(substring);
             	}
         	}

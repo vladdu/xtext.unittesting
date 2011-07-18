@@ -11,22 +11,13 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
-import org.eclipse.xtext.naming.QualifiedName;
-import org.eclipse.xtext.resource.IEObjectDescription;
-import org.eclipse.xtext.resource.IResourceDescription;
-import org.eclipse.xtext.resource.IResourceDescriptions;
-import org.eclipse.xtext.scoping.IScope;
-import org.eclipse.xtext.scoping.Scopes;
-import org.eclipse.xtext.scoping.impl.SimpleScope;
 import org.eclipse.xtext.validation.Issue;
-
-import com.google.common.base.Function;
 
 /**
  * <p>Utilities for XText supporting the IssueCollection</p>
  * <p>TODO: This class should be available in a more generic package</p>
  * 
- * @author Markus Völter - Initial Contribution and API
+ * @author Markus Voelter - Initial Contribution and API
  *
  */
 public class XtextUtils {

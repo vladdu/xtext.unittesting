@@ -1,5 +1,11 @@
 package org.eclipselabs.xtext.utils.unittesting;
 
+import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.ancestor;
+import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.eString;
+import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.egetAndResolve;
+import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.getEObject;
+import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.name;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -12,21 +18,14 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.diagnostics.Severity;
-import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.validation.Issue;
 
 import com.google.common.collect.Iterables;
-
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.ancestor;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.eString;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.egetAndResolve;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.getEObject;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.name;
  
 /**
  * Offers a fluent way of asserting Xtext Issues (Validation Warnings and Errors).
  * 
- * @author Markus Völter - Initial Contribution and API
+ * @author Markus Voelter - Initial Contribution and API
  *
  */
 public class FluentIssueCollection implements Iterable<Issue>{
