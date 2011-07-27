@@ -115,11 +115,13 @@ public class FluentIssueCollection implements Iterable<Issue>{
 	}
 	
 	public FluentIssueCollection except(Set<Issue> toBeRemoved) {
-		
 		FluentIssueCollection res = new FluentIssueCollection(resource, messages);
-		for (Issue i: issues) {
-			if ( !toBeRemoved.contains(i) ) {
-				res.addIssue( i );
+		
+		if (toBeRemoved!=null) {
+			for (Issue i: issues) {
+				if ( !toBeRemoved.contains(i) ) {
+					res.addIssue( i );
+				}
 			}
 		}
 		return res;
