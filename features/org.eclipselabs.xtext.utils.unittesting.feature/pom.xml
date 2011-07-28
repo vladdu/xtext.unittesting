@@ -6,23 +6,9 @@
 		<groupId>org.eclipselabs.xtext.utils</groupId>
 		<version>0.9.1-SNAPSHOT</version>
 		<artifactId>unittesting-parent</artifactId>
-		<relativePath>../pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
-	<artifactId>unittesting-repo</artifactId>
-	<packaging>eclipse-repository</packaging>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-p2-repository-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<includeAllDependencies>false</includeAllDependencies>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
-
+	<artifactId>org.eclipselabs.xtext.utils.unittesting.feature</artifactId>
+	<packaging>eclipse-feature</packaging>
 </project>
