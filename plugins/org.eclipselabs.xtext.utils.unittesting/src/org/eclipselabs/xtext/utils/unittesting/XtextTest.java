@@ -314,7 +314,6 @@ public abstract class XtextTest {
      * */
     protected void testNotTerminal(String input, String unexpectedTerminal) {
       List<Token> tokens = getTokens(input);
-      assertEquals(input, 1, tokens.size());
       Token token = tokens.get(0);
       
       assertNotSame(input, "RULE_" + unexpectedTerminal, getTokenType(token));

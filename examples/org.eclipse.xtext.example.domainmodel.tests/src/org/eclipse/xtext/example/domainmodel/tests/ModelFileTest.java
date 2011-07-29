@@ -17,10 +17,20 @@ public class ModelFileTest extends XtextTest {
 	@Test
 	public void person_no_attributes(){
 		testFile("person_no_attributes.dmodel");
+		/* this will fail, if any of those occur  
+		 * 
+		 *  - parsing errros
+		 *  - validationerrors/warnings
+		 *  - the serializer fails
+		 *  - the serialized and formatted result 
+		 *    doesn't exactly match the input files' 
+		 *    content
+		 *    
+		 * */
 	}
 	
 	@Test
 	public void person2_extends_person(){
-		testFile("person2_extends_person.dmodel", "person_no_attributes.dmodel");
+		testFile("person2_extends_person.dmodel", /* not tested, but indexed */ "person_no_attributes.dmodel");
 	}
 }
