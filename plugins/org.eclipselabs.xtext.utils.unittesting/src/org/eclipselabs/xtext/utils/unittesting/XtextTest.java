@@ -75,6 +75,7 @@ public abstract class XtextTest {
 	protected FluentIssueCollection issues;
 	private Set<Issue> assertedIssues;
 	private boolean compareSerializedModelToInputFile;
+	private boolean invokeSerializer;
 	private boolean formatOnSerialize;
 	private boolean failOnParserWarnings;
 	private EObject rootElement;
@@ -133,6 +134,7 @@ public abstract class XtextTest {
     public void before() {
     	issues = null;
     	assertedIssues = new HashSet<Issue>();
+    	invokeSerializer = true;
     	compareSerializedModelToInputFile = true;
     	formatOnSerialize = true;
     	failOnParserWarnings = true;
@@ -188,7 +190,7 @@ public abstract class XtextTest {
     }
     
     protected FluentIssueCollection testFileNoSerializer( String fileToTest, String... referencedResources ) {
-        ignoreSerializationDifferences();
+    	suppressSerialization();
         return testFile(fileToTest, referencedResources);
     }
     
@@ -356,7 +358,6 @@ public abstract class XtextTest {
             throw new RuntimeException(e);
         }
     }
-
     protected Pair<String, FluentIssueCollection> loadAndSaveModule(String rootPath, String filename) {
         URI uri = URI.createURI(resourceRoot + "/" + filename);
         rootElement = loadModel(resourceSet, uri, getRootObjectType(uri));
@@ -367,20 +368,24 @@ public abstract class XtextTest {
         List<Issue> result = provider.getResourceValidator().validate(r,
                 CheckMode.ALL, null);
 
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-        	Builder builder = SaveOptions.newBuilder();
-        	if (formatOnSerialize) {
-        		builder.format();
-        	}
-			SaveOptions s = builder.getOptions();
-        	
-			rootElement.eResource().save(bos, s.toOptionsMap());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (invokeSerializer) {
+	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+	        try {
+	        	Builder builder = SaveOptions.newBuilder();
+	        	if (formatOnSerialize) {
+	        		builder.format();
+	        	}
+				SaveOptions s = builder.getOptions();
+	        	
+				rootElement.eResource().save(bos, s.toOptionsMap());
+	        } catch (IOException e) {
+	            throw new RuntimeException(e);
+	        }
+	        
+	        return Tuples.create(bos.toString(), new FluentIssueCollection(r, result, new ArrayList<String>()));
+        } else {
+        	return Tuples.create("-not serialized-", new FluentIssueCollection(r, result, new ArrayList<String>()));
         }
-        
-        return Tuples.create(bos.toString(), new FluentIssueCollection(r, result, new ArrayList<String>()));
     }
 
     /**
@@ -474,6 +479,16 @@ public abstract class XtextTest {
     	ensureIsBeforeTestFile();
     	
     	compareSerializedModelToInputFile = false;
+    }
+
+    /**
+     * If called prior to #testFile, serialization won't be performed.
+     */
+    protected void suppressSerialization(){
+    	ensureIsBeforeTestFile();
+    	
+    	compareSerializedModelToInputFile = false;
+    	invokeSerializer = false;
     }
     
     /**
