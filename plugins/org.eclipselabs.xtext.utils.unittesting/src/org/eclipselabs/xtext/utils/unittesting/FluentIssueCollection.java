@@ -344,9 +344,18 @@ public class FluentIssueCollection implements Iterable<Issue>{
 	}
 	
 	public static String getIssueSummary(Resource resource, Issue issue) {
-		EObject eObject =  resource.getEObject(issue.getUriToProblem().fragment());
-		EClass cls = eObject.eClass();
-		return issue.getSeverity() + " at " + cls.getName()+"( line "+issue.getLineNumber()+"): " +issue.getMessage();
+		boolean validFragment = true;
+		if ("//".equals(issue.getUriToProblem().fragment())) {
+			validFragment = false;
+		}
+		
+		if (validFragment) {
+			EObject eObject =  resource.getEObject(issue.getUriToProblem().fragment());
+			EClass cls = eObject.eClass();
+			return issue.getSeverity() + " at " + cls.getName()+"( line "+issue.getLineNumber()+"): " +issue.getMessage();
+		} else {
+			return issue.getSeverity() + "( line "+issue.getLineNumber()+"): " +issue.getMessage();
+		}
 	}
 
 	public Iterator<Issue> iterator() {
