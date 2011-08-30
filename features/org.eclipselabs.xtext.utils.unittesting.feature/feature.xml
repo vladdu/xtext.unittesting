@@ -17,11 +17,17 @@
    </license>
 
    <url>
-      <update label="Eclipse Labs Xtext Utils Update Site" url="http://svn.codespot.com/a/eclipselabs.org/xtext-utils/updates/snapshots/"/>
+      <update label="Eclipse Labs Xtext Utils Update Site" url="http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x"/>
    </url>
 
    <plugin
          id="org.eclipselabs.xtext.utils.unittesting"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+   <plugin
+         id="org.eclipselabs.xtext.utils.unittesting.source"
          download-size="0"
          install-size="0"
          version="0.0.0"

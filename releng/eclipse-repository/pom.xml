@@ -8,7 +8,7 @@
 		<artifactId>unittesting-parent</artifactId>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	
+
 	<artifactId>unittesting-repo</artifactId>
 	<packaging>eclipse-repository</packaging>
 
