@@ -6,7 +6,7 @@
 		<groupId>org.eclipselabs.xtext.utils</groupId>
 		<version>0.9.1-SNAPSHOT</version>
 		<artifactId>unittesting-parent</artifactId>
-		<relativePath>../../pom.xml</relativePath>
+		<relativePath>../../releng/pom.xml</relativePath>
 	</parent>
 
 	<artifactId>org.eclipselabs.xtext.utils.unittesting</artifactId>

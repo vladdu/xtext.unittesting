@@ -24,9 +24,9 @@
 	</build>
 	
 	<modules>
-		<module>plugins/org.eclipselabs.xtext.utils.unittesting</module>
-		<module>features/org.eclipselabs.xtext.utils.unittesting.feature</module>
-		<module>releng/eclipse-repository</module>
+		<module>../plugins/org.eclipselabs.xtext.utils.unittesting</module>
+		<module>../features/org.eclipselabs.xtext.utils.unittesting.feature</module>
+		<module>./eclipse-repository</module>
 	</modules>
 	
 	<repositories>
