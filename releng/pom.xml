@@ -3,6 +3,12 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<parent>
+		<groupId>org.eclipselabs.xtext.utils</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
 	<groupId>org.eclipselabs.xtext.utils</groupId>
 	<version>0.9.1</version>
 	<artifactId>unittesting-parent</artifactId>
@@ -11,43 +17,14 @@
 	<properties>
 		<tycho-version>0.12.0</tycho-version>
 	</properties>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>tycho-maven-plugin</artifactId>
-				<version>${tycho-version}</version>
-				<extensions>true</extensions>
-			</plugin>
-		</plugins>
-	</build>
-	
+		
 	<modules>
 		<module>../plugins/org.eclipselabs.xtext.utils.unittesting</module>
 		<module>../features/org.eclipselabs.xtext.utils.unittesting.feature</module>
 		<module>./eclipse-repository</module>
 	</modules>
-	
-	<repositories>
-	
-		<repository>
-			<id>eclipse-indigo</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/indigo</url>
-		</repository>
 
-		<!--repository>
-			<id>eclipse-helios</id>
-			<layout>p2</layout>
-			<url>http://download.eclipse.org/releases/helios</url>
-		</repository-->
-
-		<repository>
-			<id>xtext-2.0-nightly</id>
-			<layout>p2</layout>
-			<url>https://hudson.eclipse.org/hudson/job/Xtext-nightly-HEAD/lastSuccessfulBuild/artifact/xtext.p2.repository</url>
-		</repository>
-
-	</repositories>
+	<scm>
+		<developerConnection>scm:git:https://karsten.thoms@code.google.com/a/eclipselabs.org/p/xtext-utils.unittesting/</developerConnection>
+	</scm>
 </project>
