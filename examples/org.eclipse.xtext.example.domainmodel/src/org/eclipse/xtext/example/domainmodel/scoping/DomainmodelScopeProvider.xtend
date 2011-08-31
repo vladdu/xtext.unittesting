@@ -19,26 +19,26 @@ import org.eclipse.xtext.resource.IEObjectDescription
 import org.eclipse.xtext.common.types.JvmDeclaredType
 import org.eclipse.xtext.EcoreUtil2
 import com.google.inject.Inject
+import org.eclipse.xtext.xbase.scoping.LocalVariableScopeContext
 
 class DomainmodelScopeProvider extends XbaseScopeProvider {
 
 	@Inject extension IJvmModelAssociations associations
 	
-	override IScope createLocalVarScope(EObject context, EReference reference, IScope parent,
-			boolean includeCurrentBlock, int idx) {
-		switch (context) {
+	override IScope createLocalVarScope(IScope parentScope, LocalVariableScopeContext scopeContext) {
+		switch (scopeContext.context) {
 			Entity : {
-				val jvmType = getJvmType(context)
+				val jvmType = getJvmType(scopeContext.context as Entity)
 				if(jvmType != null)
-					return new SimpleScope(parent, Collections::singleton(EObjectDescription::^create(XbaseScopeProvider::THIS, jvmType)))
+					return new SimpleScope(parentScope, Collections::singleton(EObjectDescription::^create(XbaseScopeProvider::THIS, jvmType)))
 			}
 			Operation : {
-				val descriptions = context.params.map(e | e.createIEObjectDescription())
+				val descriptions = (scopeContext.context as Operation).params.map(e | e.createIEObjectDescription())
 				return MapBasedScope::createScope(
-						super.createLocalVarScope(context, reference, parent, includeCurrentBlock, idx), descriptions);	
+						super.createLocalVarScope(parentScope, scopeContext), descriptions);	
 			}
 		}
-		return super.createLocalVarScope(context, reference, parent, includeCurrentBlock, idx)
+		return createLocalVarScope(parentScope, scopeContext)
 	}
 	
 	def createIEObjectDescription(JvmFormalParameter jvmFormalParameter) {
