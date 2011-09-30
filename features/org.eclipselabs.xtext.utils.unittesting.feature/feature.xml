@@ -2,7 +2,7 @@
 <feature
       id="org.eclipselabs.xtext.utils.unittesting.feature"
       label="Eclipse Labs Xtext Testing Utilities"
-      version="0.9.2">
+      version="0.9.3.qualifier">
 
    <description url="http://code.google.com/a/eclipselabs.org/p/xtext-utils/wiki/Unit_Testing">
       Base test fixtures and helper classes for testing Xtext-based DSLs.
