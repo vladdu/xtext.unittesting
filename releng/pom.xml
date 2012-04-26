@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>org.eclipselabs.xtext.utils</groupId>
-	<version>0.9.3-SNAPSHOT</version>
+	<version>0.9.3</version>
 	<artifactId>unittesting-parent</artifactId>
 	<packaging>pom</packaging>
 		
@@ -23,4 +23,6 @@
 	<scm>
 		<developerConnection>scm:git:https://code.google.com/a/eclipselabs.org/p/xtext-utils.unittesting/</developerConnection>
 	</scm>
+	<build>
+	</build>
 </project>
