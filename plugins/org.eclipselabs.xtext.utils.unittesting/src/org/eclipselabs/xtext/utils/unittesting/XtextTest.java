@@ -130,9 +130,13 @@ public abstract class XtextTest {
     public static void init_internal() {
         new StandaloneSetup().setPlatformUri("..");
     }
-    
+
     @Before
-    public void before() {
+    @Deprecated
+    public void before() {}
+
+    @Before
+    public final void _before() {
     	issues = null;
     	assertedIssues = new HashSet<Issue>();
     	invokeSerializer = true;
@@ -154,7 +158,11 @@ public abstract class XtextTest {
     }
     
     @After
-    public void after() {
+    @Deprecated
+    public void after() {}
+
+    @After
+    public void _after() {
         if (issues != null) {
         	dumpUnassertedIssues();
         	if (issues.except(assertedIssues).getIssues().size() != 0) {
@@ -182,7 +190,7 @@ public abstract class XtextTest {
         
         if (compareSerializedModelToInputFile) {
 	        String expected = loadFileContents(resourceRoot, fileToTest);
-	        if (isIgnoreOsSpecificNewline()) {
+	        if (ignoreOsSpecificNewline) {
 	        	expected = expected.replaceAll("(\r\n|\r)", "\n");
 	        	serialized = serialized.replaceAll("(\r\n|\r)", "\n");
 	        }
@@ -527,16 +535,12 @@ public abstract class XtextTest {
     	assertedIssues.addAll(issues.warningsOnly().except(assertedIssues).getIssues());
     }
 	
-	protected boolean isIgnoreOsSpecificNewline() {
-		return ignoreOsSpecificNewline;
-	}
-
 	/**
-	 * 
-	 * @param ignoreOsSpecificNewline
+	 * Text file comparison will ignore OS specific newlines by harmonizing expected and serialized
+	 * text with Unix style newline.  
 	 */
-	protected void setIgnoreOsSpecificNewline(boolean ignoreOsSpecificNewline) {
-		this.ignoreOsSpecificNewline = ignoreOsSpecificNewline;
+	protected void ignoreOsSpecificNewline() {
+		this.ignoreOsSpecificNewline = true;
 	}
 
 	protected void assertConstraints( FluentIssueCollection coll, String msg ) {
