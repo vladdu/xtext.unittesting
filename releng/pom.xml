@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.eclipselabs.xtext.utils</groupId>
 		<artifactId>parent</artifactId>
-		<version>1.0.0</version>
+		<version>1.1.0</version>
 	</parent>
 
 	<groupId>org.eclipselabs.xtext.utils</groupId>
@@ -21,6 +21,6 @@
 	</modules>
 
 	<scm>
-		<developerConnection>scm:git:https://karsten.thoms@code.google.com/a/eclipselabs.org/p/xtext-utils.unittesting/</developerConnection>
+		<developerConnection>scm:git:https://code.google.com/a/eclipselabs.org/p/xtext-utils.unittesting/</developerConnection>
 	</scm>
 </project>
