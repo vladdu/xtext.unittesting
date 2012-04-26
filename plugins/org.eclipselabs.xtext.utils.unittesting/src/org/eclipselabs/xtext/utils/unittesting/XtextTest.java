@@ -78,6 +78,7 @@ public abstract class XtextTest {
 	private boolean invokeSerializer;
 	private boolean formatOnSerialize;
 	private boolean failOnParserWarnings;
+	private boolean ignoreOsSpecificNewline;
 	private EObject rootElement;
     /* END STATE for #testFile */
 	
@@ -175,12 +176,16 @@ public abstract class XtextTest {
             loadModel(resourceSet, uri, getRootObjectType(uri));
         }
         
-        Pair<String,FluentIssueCollection> result = loadAndSaveModule(resourceRoot, fileToTest);
+        final Pair<String,FluentIssueCollection> result = loadAndSaveModule(resourceRoot, fileToTest);
         
         String serialized = result.getFirst();
         
         if (compareSerializedModelToInputFile) {
 	        String expected = loadFileContents(resourceRoot, fileToTest);
+	        if (isIgnoreOsSpecificNewline()) {
+	        	expected = expected.replaceAll("(\r\n|\r)", "\n");
+	        	serialized = serialized.replaceAll("(\r\n|\r)", "\n");
+	        }
 	        // Remove trailing whitespace, see Bug#320074
 	        // todo: Check if the trim really is still necessary!!
 	        assertEquals(expected.trim(), serialized.trim());
@@ -522,6 +527,18 @@ public abstract class XtextTest {
     	assertedIssues.addAll(issues.warningsOnly().except(assertedIssues).getIssues());
     }
 	
+	protected boolean isIgnoreOsSpecificNewline() {
+		return ignoreOsSpecificNewline;
+	}
+
+	/**
+	 * 
+	 * @param ignoreOsSpecificNewline
+	 */
+	protected void setIgnoreOsSpecificNewline(boolean ignoreOsSpecificNewline) {
+		this.ignoreOsSpecificNewline = ignoreOsSpecificNewline;
+	}
+
 	protected void assertConstraints( FluentIssueCollection coll, String msg ) {
 		ensureIsAfterTestFile();
 		
