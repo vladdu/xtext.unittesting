@@ -21,6 +21,7 @@ Workflow {
 	bean = StandaloneSetup {
 		scanClassPath  = true
 		platformUri = "${runtimeProject}/.."
+		registerGeneratedEPackage = "org.eclipse.xtext.xbase.XbasePackage"
 		registerGenModelFile = "platform:/resource/org.eclipse.xtext.xbase/model/Xbase.genmodel"
 		registerGenModelFile = "platform:/resource/org.eclipse.xtext.common.types/model/JavaVMTypes.genmodel"
 	}
@@ -99,9 +100,7 @@ Workflow {
 			fragment = quickfix.QuickfixProviderFragment {}
 			
 			// rename refactoring
-			fragment = refactoring.RefactorElementNameFragment {
-				useJdtRefactoring = true
-			}
+			fragment = refactoring.RefactorElementNameFragment {}
 			
 			// provides a compare view
 			fragment = compare.CompareFragment {
@@ -114,11 +113,9 @@ Workflow {
 			
 			// Code generator
 			fragment = generator.GeneratorFragment {
-				generateJavaMain = false
-				generateMwe = false
 			}
 			
-			// fragment = org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment {}
+			fragment = templates.CodetemplatesGeneratorFragment {}
 		}
 	}
 }

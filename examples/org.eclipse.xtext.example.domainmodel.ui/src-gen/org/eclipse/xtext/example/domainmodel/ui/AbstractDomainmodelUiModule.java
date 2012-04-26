@@ -109,23 +109,28 @@ public abstract class AbstractDomainmodelUiModule extends DefaultUiModule {
 	}
 
 	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
-	public Class<? extends org.eclipse.xtext.ui.refactoring.ui.RenameElementHandler> bindRenameElementHandler() {
-		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.jdt.JvmRenameElementHandler.class;
+	public void configureIPreferenceStoreInitializer(com.google.inject.Binder binder) {
+		binder.bind(org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer.class).annotatedWith(com.google.inject.name.Names.named("RefactoringPreferences")).to(org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferences.Initializer.class);
 	}
 
 	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
 	public Class<? extends org.eclipse.xtext.ui.refactoring.IRenameRefactoringProvider> bindIRenameRefactoringProvider() {
-		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.jdt.JvmRenameRefactoringProvider.class;
-	}
-
-	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
-	public Class<? extends org.eclipse.xtext.ui.refactoring.IRenameProcessorAdapter.Factory> bindIRenameProcessorAdapter$Factory() {
-		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.jdt.JavaRenameProcessorAdapter.Factory.class;
+		return org.eclipse.xtext.common.types.ui.refactoring.JvmRenameRefactoringProvider.class;
 	}
 
 	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
 	public Class<? extends org.eclipse.xtext.ui.refactoring.ui.IRenameSupport.Factory> bindIRenameSupport$Factory() {
-		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.jdt.JdtAwareRenameSupportFactory.class;
+		return org.eclipse.xtext.common.types.ui.refactoring.JdtRenameSupport.Factory.class;
+	}
+
+	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
+	public Class<? extends org.eclipse.xtext.ui.refactoring.IRenameStrategy.Provider> bindIRenameStrategy$Provider() {
+		return org.eclipse.xtext.common.types.ui.refactoring.participant.JvmMemberRenameStrategy.Provider.class;
+	}
+
+	// contributed by org.eclipse.xtext.ui.generator.refactoring.RefactorElementNameFragment
+	public void configureJvmMemberRenameStrategy$Provider$Delegate(com.google.inject.Binder binder) {
+		binder.bind(org.eclipse.xtext.ui.refactoring.IRenameStrategy.Provider.class).annotatedWith(org.eclipse.xtext.common.types.ui.refactoring.participant.JvmMemberRenameStrategy.Provider.Delegate.class).to(org.eclipse.xtext.ui.refactoring.impl.DefaultRenameStrategyProvider.class);
 	}
 
 	// contributed by org.eclipse.xtext.ui.generator.compare.CompareFragment
@@ -168,6 +173,16 @@ public abstract class AbstractDomainmodelUiModule extends DefaultUiModule {
 		return org.eclipse.xtext.ui.editor.contentassist.FQNPrefixMatcher.class;
 	}
 
+	// contributed by org.eclipse.xtext.generator.types.TypesGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.editor.IValidationJobScheduler> bindIValidationJobScheduler() {
+		return org.eclipse.xtext.common.types.xtext.ui.JdtValidationJobScheduler.class;
+	}
+
+	// contributed by org.eclipse.xtext.generator.types.TypesGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.refactoring.impl.RefactoringResourceSetProvider> bindRefactoringResourceSetProvider() {
+		return org.eclipse.xtext.common.types.ui.refactoring.JvmRefactoringResourceSetProvider.class;
+	}
+
 	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
 	public Class<? extends org.eclipse.xtext.ui.editor.syntaxcoloring.AbstractAntlrTokenToAttributeIdMapper> bindAbstractAntlrTokenToAttributeIdMapper() {
 		return org.eclipse.xtext.xbase.ui.syntaxcoloring.XbaseTokenToAttributeIdMapper.class;
@@ -186,6 +201,11 @@ public abstract class AbstractDomainmodelUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
 	public Class<? extends org.eclipse.xtext.ui.editor.syntaxcoloring.ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return org.eclipse.xtext.xbase.ui.highlighting.XbaseHighlightingCalculator.class;
+	}
+
+	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return org.eclipse.xtext.xbase.ui.highlighting.XbaseHighlightingConfiguration.class;
 	}
 
 	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
@@ -214,18 +234,33 @@ public abstract class AbstractDomainmodelUiModule extends DefaultUiModule {
 	}
 
 	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
-	public Class<? extends org.eclipse.xtext.ui.refactoring.IRenameStrategy.Provider> bindIRenameStrategy$Provider() {
-		return org.eclipse.xtext.example.domainmodel.ui.refactoring.DomainmodelRenameStrategy.Provider.class;
+	public Class<? extends org.eclipse.xtext.ui.refactoring.ui.IRenameElementHandler> bindIRenameElementHandler() {
+		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.JvmModelRenameElementHandler.class;
 	}
 
 	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
-	public Class<? extends org.eclipse.xtext.ui.refactoring.impl.RefactoringResourceSetProvider> bindRefactoringResourceSetProvider() {
-		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.JvmModelRefactoringResourceSetProvider.class;
+	public Class<? extends org.eclipse.xtext.common.types.ui.refactoring.participant.JdtRenameParticipant.ContextFactory> bindJdtRenameParticipant$ContextFactory() {
+		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.JvmModelJdtRenameParticipantContext.ContextFactory.class;
+	}
+
+	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.refactoring.IRenameStrategy> bindIRenameStrategy() {
+		return org.eclipse.xtext.xbase.ui.jvmmodel.refactoring.DefaultJvmModelRenameStrategy.class;
+	}
+
+	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.editor.outline.impl.OutlineNodeElementOpener> bindOutlineNodeElementOpener() {
+		return org.eclipse.xtext.xbase.ui.jvmmodel.outline.JvmOutlineNodeElementOpener.class;
+	}
+
+	// contributed by org.eclipse.xtext.generator.xbase.XbaseGeneratorFragment
+	public Class<? extends org.eclipse.xtext.ui.editor.GlobalURIEditorOpener> bindGlobalURIEditorOpener() {
+		return org.eclipse.xtext.builder.navigation.GlobalDerivedMemberAwareURIEditorOpener.class;
 	}
 
 	// contributed by org.eclipse.xtext.generator.generator.GeneratorFragment
 	public Class<? extends org.eclipse.xtext.builder.IXtextBuilderParticipant> bindIXtextBuilderParticipant() {
-		return org.eclipse.xtext.builder.JavaProjectBasedBuilderParticipant.class;
+		return org.eclipse.xtext.builder.BuilderParticipant.class;
 	}
 
 	// contributed by org.eclipse.xtext.generator.generator.GeneratorFragment
@@ -233,27 +268,32 @@ public abstract class AbstractDomainmodelUiModule extends DefaultUiModule {
 		return org.eclipse.core.resources.ResourcesPlugin.getWorkspace().getRoot();
 	}
 
-	// contributed by org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment
+	// contributed by org.eclipse.xtext.generator.generator.GeneratorFragment
+	public void configureBuilderPreferenceStoreInitializer(com.google.inject.Binder binder) {
+		binder.bind(org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer.class).annotatedWith(com.google.inject.name.Names.named("builderPreferenceInitializer")).to(org.eclipse.xtext.builder.preferences.BuilderPreferenceAccess.Initializer.class);
+	}
+
+	// contributed by org.eclipse.xtext.ui.generator.templates.CodetemplatesGeneratorFragment
 	public com.google.inject.Provider<org.eclipse.xtext.ui.codetemplates.ui.preferences.TemplatesLanguageConfiguration> provideTemplatesLanguageConfiguration() {
 		return org.eclipse.xtext.ui.codetemplates.ui.AccessibleCodetemplatesActivator.getTemplatesLanguageConfigurationProvider();
 	}
 
-	// contributed by org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment
+	// contributed by org.eclipse.xtext.ui.generator.templates.CodetemplatesGeneratorFragment
 	public com.google.inject.Provider<org.eclipse.xtext.ui.codetemplates.ui.registry.LanguageRegistry> provideLanguageRegistry() {
 		return org.eclipse.xtext.ui.codetemplates.ui.AccessibleCodetemplatesActivator.getLanguageRegistry();
 	}
 
-	// contributed by org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment
+	// contributed by org.eclipse.xtext.ui.generator.templates.CodetemplatesGeneratorFragment
 	@org.eclipse.xtext.service.SingletonBinding(eager=true)	public Class<? extends org.eclipse.xtext.ui.codetemplates.ui.registry.LanguageRegistrar> bindLanguageRegistrar() {
 		return org.eclipse.xtext.ui.codetemplates.ui.registry.LanguageRegistrar.class;
 	}
 
-	// contributed by org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment
+	// contributed by org.eclipse.xtext.ui.generator.templates.CodetemplatesGeneratorFragment
 	public Class<? extends org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage> bindXtextTemplatePreferencePage() {
 		return org.eclipse.xtext.ui.codetemplates.ui.preferences.AdvancedTemplatesPreferencePage.class;
 	}
 
-	// contributed by org.eclipse.xtext.ui.codetemplates.generator.CodetemplatesGeneratorFragment
+	// contributed by org.eclipse.xtext.ui.generator.templates.CodetemplatesGeneratorFragment
 	public Class<? extends org.eclipse.xtext.ui.codetemplates.ui.partialEditing.IPartialContentAssistParser> bindIPartialContentAssistParser() {
 		return org.eclipse.xtext.example.domainmodel.ui.contentassist.antlr.PartialDomainmodelContentAssistParser.class;
 	}

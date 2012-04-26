@@ -24,7 +24,7 @@ PackageDeclaration:
 	'}';
 
 Entity:
-	'entity' name=ValidID ('extends' superType=JvmTypeReference)? '{'
+	'entity' name=ValidID ('extends' superType=JvmParameterizedTypeReference)? '{'
 		features+=Feature*
 	'}';
 
@@ -35,11 +35,8 @@ Property:
 	name=ValidID ':' type=JvmTypeReference;
 
 Operation:
-	visibility=Visibility? 'op' name=ValidID '(' (params+=JvmFormalParameter (',' params+=JvmFormalParameter)*)? ')' ':' type=JvmTypeReference 
+	'op' name=ValidID '(' (params+=FullJvmFormalParameter (',' params+=FullJvmFormalParameter)*)? ')' ':' type=JvmTypeReference 
 		body=XBlockExpression;
-
-enum Visibility:
-	public | private | protected;
 
 QualifiedNameWithWildCard :
 	QualifiedName  ('.' '*')?;

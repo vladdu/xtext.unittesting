@@ -7,7 +7,6 @@ package org.eclipse.xtext.example.domainmodel.domainmodel.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
@@ -25,13 +24,8 @@ import org.eclipse.xtext.example.domainmodel.domainmodel.Import;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Operation;
 import org.eclipse.xtext.example.domainmodel.domainmodel.PackageDeclaration;
 import org.eclipse.xtext.example.domainmodel.domainmodel.Property;
-import org.eclipse.xtext.example.domainmodel.domainmodel.Visibility;
 
 import org.eclipse.xtext.xbase.XbasePackage;
-
-import org.eclipse.xtext.xbase.annotations.xAnnotations.XAnnotationsPackage;
-
-import org.eclipse.xtext.xtype.XtypePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -98,13 +92,6 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
   private EClass operationEClass = null;
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  private EEnum visibilityEEnum = null;
-
-  /**
    * Creates an instance of the model <b>Package</b>, registered with
    * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
    * package URI value.
@@ -153,8 +140,6 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
     isInited = true;
 
     // Initialize simple dependencies
-    XAnnotationsPackage.eINSTANCE.eClass();
-    XtypePackage.eINSTANCE.eClass();
     XbasePackage.eINSTANCE.eClass();
 
     // Create package meta-data objects
@@ -347,19 +332,9 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
    * <!-- end-user-doc -->
    * @generated
    */
-  public EAttribute getOperation_Visibility()
-  {
-    return (EAttribute)operationEClass.getEStructuralFeatures().get(0);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
   public EReference getOperation_Params()
   {
-    return (EReference)operationEClass.getEStructuralFeatures().get(1);
+    return (EReference)operationEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -369,17 +344,7 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
    */
   public EReference getOperation_Body()
   {
-    return (EReference)operationEClass.getEStructuralFeatures().get(2);
-  }
-
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @generated
-   */
-  public EEnum getVisibility()
-  {
-    return visibilityEEnum;
+    return (EReference)operationEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -436,12 +401,8 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
     propertyEClass = createEClass(PROPERTY);
 
     operationEClass = createEClass(OPERATION);
-    createEAttribute(operationEClass, OPERATION__VISIBILITY);
     createEReference(operationEClass, OPERATION__PARAMS);
     createEReference(operationEClass, OPERATION__BODY);
-
-    // Create enums
-    visibilityEEnum = createEEnum(VISIBILITY);
   }
 
   /**
@@ -503,20 +464,13 @@ public class DomainmodelPackageImpl extends EPackageImpl implements DomainmodelP
 
     initEClass(featureEClass, Feature.class, "Feature", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getFeature_Name(), ecorePackage.getEString(), "name", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getFeature_Type(), theTypesPackage.getJvmParameterizedTypeReference(), null, "type", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getFeature_Type(), theTypesPackage.getJvmTypeReference(), null, "type", null, 0, 1, Feature.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(propertyEClass, Property.class, "Property", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
     initEClass(operationEClass, Operation.class, "Operation", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getOperation_Visibility(), this.getVisibility(), "visibility", null, 0, 1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperation_Params(), theTypesPackage.getJvmFormalParameter(), null, "params", null, 0, -1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getOperation_Body(), theXbasePackage.getXExpression(), null, "body", null, 0, 1, Operation.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-    // Initialize enums and add enum literals
-    initEEnum(visibilityEEnum, Visibility.class, "Visibility");
-    addEEnumLiteral(visibilityEEnum, Visibility.PUBLIC);
-    addEEnumLiteral(visibilityEEnum, Visibility.PRIVATE);
-    addEEnumLiteral(visibilityEEnum, Visibility.PROTECTED);
 
     // Create resource
     createResource(eNS_URI);
