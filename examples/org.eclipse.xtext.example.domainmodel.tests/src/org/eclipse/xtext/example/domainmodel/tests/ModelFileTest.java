@@ -1,13 +1,14 @@
 package org.eclipse.xtext.example.domainmodel.tests;
 
 import org.eclipse.xtext.example.domainmodel.DomainmodelInjectorProvider;
+import org.eclipse.xtext.example.domainmodel.validation.IssueCodes;
 import org.eclipse.xtext.junit4.InjectWith;
-import org.eclipse.xtext.junit4.XtextRunner;
+import org.eclipselabs.xtext.utils.unittesting.XtextRunner2;
 import org.eclipselabs.xtext.utils.unittesting.XtextTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-@RunWith(XtextRunner.class)
+@RunWith(XtextRunner2.class)
 @InjectWith(DomainmodelInjectorProvider.class)
 public class ModelFileTest extends XtextTest {
 	public ModelFileTest() {
@@ -29,8 +30,14 @@ public class ModelFileTest extends XtextTest {
 		 * */
 	}
 	
-	@Test
-	public void person2_extends_person(){
-		testFile("person2_extends_person.dmodel", /* not tested, but indexed */ "person_no_attributes.dmodel");
-	}
+  @Test
+  public void person2_extends_person(){
+    testFile("person2_extends_person.dmodel", /* not tested, but indexed */ "person_no_attributes.dmodel");
+  }
+
+  @Test
+  public void test_withCode(){
+    testFile("person_invalid_typename.dmodel");
+    assertConstraints(issues.withCode(IssueCodes.INVALID_TYPE_NAME).sizeIs(1));
+  }
 }

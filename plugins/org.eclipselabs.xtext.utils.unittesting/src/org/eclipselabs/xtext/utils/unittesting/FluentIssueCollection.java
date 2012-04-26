@@ -275,6 +275,25 @@ public class FluentIssueCollection implements Iterable<Issue>{
 		return oneOfThemContains(substring);
 	}
 	
+	/**
+	 * Filters all issues with a specific {@link Issue#getCode() issue code}.
+	 * 
+	 * @param code Issue code
+	 * @return A new instance containing the issues with the given code.
+	 */
+	public FluentIssueCollection withCode( String code ) {
+		FluentIssueCollection res = new FluentIssueCollection(resource, messages);
+		for (Issue i: issues) {
+			if ( i.getCode().equals(code)) {
+				res.addIssue( i );
+			}
+		}
+		if (res.getIssueCount() == 0 ) {
+			res.addMessage("failed withCode: no issues found with code '"+code+"'");
+		}
+		return res;
+	}
+	
 	public boolean evaluate() {
 		return state;
 	}
