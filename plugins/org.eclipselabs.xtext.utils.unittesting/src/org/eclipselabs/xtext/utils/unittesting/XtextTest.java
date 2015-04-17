@@ -15,8 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import junit.framework.Assert;
-
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.Token;
@@ -55,75 +53,82 @@ import org.junit.BeforeClass;
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 
+import junit.framework.Assert;
+
 /**
- * <p>Base class for testing Xtext-based DSLs including validation, serialization, formatting, e.g.</p>
- * 
- * <p>{@see XtextTest} offers integration testing of model files (load, validate, serialize, compare)
- * as well as very specific unit-style testing for terminals, keywords and parser rules.</p>
+ * <p>
+ * Base class for testing Xtext-based DSLs including validation, serialization,
+ * formatting, e.g.
+ * </p>
+ *
+ * <p>
+ * {@see XtextTest} offers integration testing of model files (load, validate,
+ * serialize, compare) as well as very specific unit-style testing for
+ * terminals, keywords and parser rules.
+ * </p>
  *
  * @author Karsten Thoms
  * @author Lars Corneliussen
  * @author Markus Voelter
  * @author Alexander Nittka
- * 
+ *
  */
 public abstract class XtextTest {
-    
-	protected String resourceRoot;
-	
-	/* STATE for #testFile. TO BE initialized in #before */
-	protected FluentIssueCollection issues;
-	private Set<Issue> assertedIssues;
-	private boolean compareSerializedModelToInputFile;
-	private boolean invokeSerializer;
-	private boolean formatOnSerialize;
-	private boolean failOnParserWarnings;
-	private boolean ignoreOsSpecificNewline;
-	private EObject rootElement;
+
+    protected String resourceRoot;
+
+    /* STATE for #testFile. TO BE initialized in #before */
+    protected FluentIssueCollection issues;
+    private Set<Issue> assertedIssues;
+    private boolean compareSerializedModelToInputFile;
+    private boolean invokeSerializer;
+    private boolean formatOnSerialize;
+    private boolean failOnParserWarnings;
+    private boolean ignoreOsSpecificNewline;
+    private EObject rootElement;
     /* END STATE for #testFile */
-	
+
     private static Logger LOGGER = Logger.getLogger(XtextTest.class);
-    
+
     @Inject
     protected ResourceSet resourceSet;
-    
+
     @Inject
     private IResourceServiceProvider.Registry serviceProviderRegistry;
-    
+
     @Inject
     private IGrammarAccess grammar;
-    
+
     @Inject
     private IParser parser;
-    
+
     @Inject
     private Lexer lexer;
-    
+
     @Inject
     private ITokenDefProvider tokenDefProvider;
-    
+
     public XtextTest() {
-        this ("/");
+        this("/");
     }
 
-    public XtextTest(String resourceRoot) {
-    	/* Classpath resuolution is weird
-    	 * 
-    	 * For resources directly in the classpath, you need a starting slash after 'classpath:/':
-    	 *   - classpath://bla.txt
-    	 *   
-    	 * But if you wan't to point to something in a subfolder, the subfolder must
-    	 * occur directly after 'classpath:/':
-    	 *   - classpath://subfolder
-    	 *   
-    	 * A trailing slash is optional.
-    	 * */
-    	if (!resourceRoot.contains(":/")) {
-    		this.resourceRoot = "classpath:/" + resourceRoot;
-    	}
-    	else {
-    		this.resourceRoot = resourceRoot;
-    	}
+    public XtextTest(final String resourceRoot) {
+        /*
+         * Classpath resuolution is weird
+         * 
+         * For resources directly in the classpath, you need a starting slash
+         * after 'classpath:/': - classpath://bla.txt
+         * 
+         * But if you wan't to point to something in a subfolder, the subfolder
+         * must occur directly after 'classpath:/': - classpath://subfolder
+         * 
+         * A trailing slash is optional.
+         */
+        if (!resourceRoot.contains(":/")) {
+            this.resourceRoot = "classpath:/" + resourceRoot;
+        } else {
+            this.resourceRoot = resourceRoot;
+        }
     }
 
     @BeforeClass
@@ -133,233 +138,259 @@ public abstract class XtextTest {
 
     @Before
     @Deprecated
-    public void before() {}
+    public void before() {
+    }
 
     @Before
     public final void _before() {
-    	issues = null;
-    	assertedIssues = new HashSet<Issue>();
-    	invokeSerializer = true;
-    	compareSerializedModelToInputFile = true;
-    	formatOnSerialize = true;
-    	failOnParserWarnings = true;
+        issues = null;
+        assertedIssues = new HashSet<Issue>();
+        invokeSerializer = true;
+        compareSerializedModelToInputFile = true;
+        formatOnSerialize = true;
+        failOnParserWarnings = true;
     }
-    
-    private void ensureIsBeforeTestFile(){
-    	if (issues != null) {
-    		throw new RuntimeException("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run BEFORE 'testFile' is executed!");
-    	}
+
+    private void ensureIsBeforeTestFile() {
+        if (issues != null) {
+            throw new RuntimeException(
+                    "Method "
+                            + new Throwable().fillInStackTrace()
+                                    .getStackTrace()[1].getMethodName()
+                            + " must be run BEFORE 'testFile' is executed!");
+        }
     }
-    
-    private void ensureIsAfterTestFile(){
-    	if (issues == null) {
-    		throw new RuntimeException("Method " + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName() + " must be run AFTER 'testFile' is executed!");
-    	}
+
+    private void ensureIsAfterTestFile() {
+        if (issues == null) {
+            throw new RuntimeException(
+                    "Method "
+                            + new Throwable().fillInStackTrace()
+                                    .getStackTrace()[1].getMethodName()
+                            + " must be run AFTER 'testFile' is executed!");
+        }
     }
-    
+
     @After
     @Deprecated
-    public void after() {}
+    public void after() {
+    }
 
     @After
     public void _after() {
         if (issues != null) {
-        	dumpUnassertedIssues();
-        	if (issues.except(assertedIssues).getIssues().size() != 0) {
-        		Assert.fail("\n\nfound unasserted issues " + issues.except(assertedIssues).getSummary() + "\n\n");
-        	}
+            dumpUnassertedIssues();
+            if (issues.except(assertedIssues).getIssues().size() != 0) {
+                Assert.fail("\n\nfound unasserted issues "
+                        + issues.except(assertedIssues).getSummary() + "\n\n");
+            }
         }
     }
-    
+
     protected EObject getModelRoot() {
-    	return rootElement;
+        return rootElement;
     }
-    
-    protected FluentIssueCollection testFile(String fileToTest, String... referencedResources) {
-    	
-		LOGGER.info("testing " + fileToTest + " in test method " +this.getClass().getSimpleName() + "." + new Throwable().fillInStackTrace().getStackTrace()[1].getMethodName());
-		
-        for (String referencedResource : referencedResources) {
-            URI uri = URI.createURI(resourceRoot + "/" + referencedResource);
+
+    protected FluentIssueCollection testFile(final String fileToTest,
+            final String... referencedResources) {
+
+        LOGGER.info("testing " + fileToTest + " in test method "
+                + this.getClass().getSimpleName() + "."
+                + new Throwable().fillInStackTrace().getStackTrace()[1]
+                        .getMethodName());
+
+        for (final String referencedResource : referencedResources) {
+            final URI uri = URI
+                    .createURI(resourceRoot + "/" + referencedResource);
             loadModel(resourceSet, uri, getRootObjectType(uri));
         }
-        
-        final Pair<String,FluentIssueCollection> result = loadAndSaveModule(resourceRoot, fileToTest);
-        
+
+        final Pair<String, FluentIssueCollection> result = loadAndSaveModule(
+                resourceRoot, fileToTest);
+
         String serialized = result.getFirst();
-        
+
         if (compareSerializedModelToInputFile) {
-	        String expected = loadFileContents(resourceRoot, fileToTest);
-	        if (ignoreOsSpecificNewline) {
-	        	expected = expected.replaceAll("(\r\n|\r)", "\n");
-	        	serialized = serialized.replaceAll("(\r\n|\r)", "\n");
-	        }
-	        // Remove trailing whitespace, see Bug#320074
-	        // todo: Check if the trim really is still necessary!!
-	        assertEquals(expected.trim(), serialized.trim());
+            String expected = loadFileContents(resourceRoot, fileToTest);
+            if (ignoreOsSpecificNewline) {
+                expected = expected.replaceAll("(\r\n|\r)", "\n");
+                serialized = serialized.replaceAll("(\r\n|\r)", "\n");
+            }
+            // Remove trailing whitespace, see Bug#320074
+            // todo: Check if the trim really is still necessary!!
+            assertEquals(expected.trim(), serialized.trim());
         }
-        
+
         return issues = result.getSecond();
     }
-    
-    protected FluentIssueCollection testFileNoSerializer( String fileToTest, String... referencedResources ) {
-    	suppressSerialization();
+
+    protected FluentIssueCollection testFileNoSerializer(
+            final String fileToTest, final String... referencedResources) {
+        suppressSerialization();
         return testFile(fileToTest, referencedResources);
     }
-    
-    protected void testParserRule(String textToParse, String ruleName) {
+
+    protected void testParserRule(final String textToParse,
+            final String ruleName) {
         testParserRule(textToParse, ruleName, false);
     }
 
-    private List<SyntaxErrorMessage> testParserRule(String textToParse, String ruleName,
-            boolean errorsExpected) {
-    	
-    	ParserRule parserRule = (ParserRule) GrammarUtil.findRuleForName(grammar.getGrammar(), ruleName);
-        
-    	if (parserRule == null){
-    		fail("\n\nCould not find ParserRule " + ruleName + "\n\n");
-    	}
-    	
-    	IParseResult result = parser.parse(parserRule, new StringReader(textToParse));
-        
-        ArrayList<SyntaxErrorMessage> errors = Lists.newArrayList();
-        ArrayList<String> errMsg = Lists.newArrayList();
-        
-        for (INode err : result.getSyntaxErrors()) {
-        	errors.add(err.getSyntaxErrorMessage());
-        	errMsg.add(err.getSyntaxErrorMessage().getMessage());
+    private List<SyntaxErrorMessage> testParserRule(final String textToParse,
+            final String ruleName, final boolean errorsExpected) {
+
+        final ParserRule parserRule = (ParserRule) GrammarUtil
+                .findRuleForName(grammar.getGrammar(), ruleName);
+
+        if (parserRule == null) {
+            fail("\n\nCould not find ParserRule " + ruleName + "\n\n");
         }
-        
+
+        final IParseResult result = parser.parse(parserRule,
+                new StringReader(textToParse));
+
+        final ArrayList<SyntaxErrorMessage> errors = Lists.newArrayList();
+        final ArrayList<String> errMsg = Lists.newArrayList();
+
+        for (final INode err : result.getSyntaxErrors()) {
+            errors.add(err.getSyntaxErrorMessage());
+            errMsg.add(err.getSyntaxErrorMessage().getMessage());
+        }
+
         if (!errorsExpected && !errors.isEmpty()) {
-            fail("\n\nParsing of text '" + textToParse + "' for rule '" + ruleName
-                    + "' failed with errors: " + errMsg + "\n\n");
+            fail("\n\nParsing of text '" + textToParse + "' for rule '"
+                    + ruleName + "' failed with errors: " + errMsg + "\n\n");
         }
         if (errorsExpected && errors.isEmpty()) {
-            fail("\n\nParsing of text '" + textToParse + "' for rule '" + ruleName
-                    + "' was expected to have parse errors.\n\n");
+            fail("\n\nParsing of text '" + textToParse + "' for rule '"
+                    + ruleName + "' was expected to have parse errors.\n\n");
         }
 
         return errors;
     }
 
-    protected void testParserRuleErrors(String textToParse, String ruleName, 
-            String... expectedErrorSubstrings) {
-        List<SyntaxErrorMessage> errors = testParserRule(textToParse, ruleName, true);
-        
-        Set<String> matchingSubstrings = new HashSet<String>();
-        Set<String> assertedErrors = new HashSet<String>();
-        
+    protected void testParserRuleErrors(final String textToParse,
+            final String ruleName, final String... expectedErrorSubstrings) {
+        final List<SyntaxErrorMessage> errors = testParserRule(textToParse,
+                ruleName, true);
+
+        final Set<String> matchingSubstrings = new HashSet<String>();
+        final Set<String> assertedErrors = new HashSet<String>();
+
         boolean hadError = false;
-        for(final SyntaxErrorMessage err : errors){
-        	for(final String substring : expectedErrorSubstrings) {
-        		boolean contains = err.getMessage().contains(substring);
-            	if (contains) {
-            		matchingSubstrings.add(substring);
-            	}
-        	}
-        	
-        	assertedErrors.add(err.getMessage());
+        for (final SyntaxErrorMessage err : errors) {
+            for (final String substring : expectedErrorSubstrings) {
+                final boolean contains = err.getMessage().contains(substring);
+                if (contains) {
+                    matchingSubstrings.add(substring);
+                }
+            }
+
+            assertedErrors.add(err.getMessage());
         }
-    
-        StringBuilder error = new StringBuilder();
+
+        final StringBuilder error = new StringBuilder();
         if (expectedErrorSubstrings.length != matchingSubstrings.size()) {
-        	error.append("Unmatched assertions:");
-        	for (String string : expectedErrorSubstrings) {
-				if (!matchingSubstrings.contains(string)){
-					error.append("\n  - any error containing '" + string + "'");
-				}
-			}
-        	error.append("\n");
-        	hadError = true;
+            error.append("Unmatched assertions:");
+            for (final String string : expectedErrorSubstrings) {
+                if (!matchingSubstrings.contains(string)) {
+                    error.append("\n  - any error containing '" + string + "'");
+                }
+            }
+            error.append("\n");
+            hadError = true;
         }
-        
+
         if (assertedErrors.size() != errors.size()) {
-        	error.append("Unasserted Errors:");
-        	for (SyntaxErrorMessage err : errors) {
-				if (!assertedErrors.contains(err.getMessage())){
-					error.append("\n  - " + err.getMessage());
-				}
-			}	
+            error.append("Unasserted Errors:");
+            for (final SyntaxErrorMessage err : errors) {
+                if (!assertedErrors.contains(err.getMessage())) {
+                    error.append("\n  - " + err.getMessage());
+                }
+            }
         }
-        
-        String failMessage = error.toString();
-        if (hadError || (!failMessage.equals("") && failOnParserWarnings)) {
-        	fail("\n\n" + failMessage + "\n\n");
+
+        final String failMessage = error.toString();
+        if (hadError || !failMessage.equals("") && failOnParserWarnings) {
+            fail("\n\n" + failMessage + "\n\n");
         }
     }
-    
-     /**
+
+    /**
      * return the list of tokens created by the lexer from the given input
-     * */
-    protected List<Token> getTokens(String input) {
-      CharStream stream = new ANTLRStringStream(input);
-      lexer.setCharStream(stream);
-      XtextTokenStream tokenStream = new XtextTokenStream(lexer,
-          tokenDefProvider);
-      @SuppressWarnings("unchecked")
-      List<Token> tokens = tokenStream.getTokens();
-      return tokens;
+     */
+    protected List<Token> getTokens(final String input) {
+        final CharStream stream = new ANTLRStringStream(input);
+        lexer.setCharStream(stream);
+        final XtextTokenStream tokenStream = new XtextTokenStream(lexer,
+                tokenDefProvider);
+        @SuppressWarnings("unchecked")
+        final List<Token> tokens = tokenStream.getTokens();
+        return tokens;
     }
 
     /**
      * return the name of the terminal rule for a given token
-     * */
-    protected String getTokenType(Token token) {
-      return tokenDefProvider.getTokenDefMap().get(token.getType());
+     */
+    protected String getTokenType(final Token token) {
+        return tokenDefProvider.getTokenDefMap().get(token.getType());
     }
 
     /**
      * check whether an input is chopped into a list of expected token types
-     * */
-    protected void testTerminal(String input, String... expectedTerminals) {
-      List<Token> tokens = getTokens(input);
-      assertEquals(input, expectedTerminals.length, tokens.size());
-      for (int i = 0; i < tokens.size(); i++) {
-        Token token = tokens.get(i);
-        String exp = expectedTerminals[i];
-        if (!exp.startsWith("'")) {
-        	exp = "RULE_" + exp;
+     */
+    protected void testTerminal(final String input,
+            final String... expectedTerminals) {
+        final List<Token> tokens = getTokens(input);
+        assertEquals(input, expectedTerminals.length, tokens.size());
+        for (int i = 0; i < tokens.size(); i++) {
+            final Token token = tokens.get(i);
+            String exp = expectedTerminals[i];
+            if (!exp.startsWith("'")) {
+                exp = "RULE_" + exp;
+            }
+            assertEquals(input, exp, getTokenType(token));
         }
-        assertEquals(input, exp, getTokenType(token));
-      }
     }
 
     /**
      * check that an input is not tokenised using a particular terminal rule
-     * */
-    protected void testNotTerminal(String input, String unexpectedTerminal) {
-      List<Token> tokens = getTokens(input);
-      Token token = tokens.get(0);
-      
-      assertNotSame(input, "RULE_" + unexpectedTerminal, getTokenType(token));
+     */
+    protected void testNotTerminal(final String input,
+            final String unexpectedTerminal) {
+        final List<Token> tokens = getTokens(input);
+        final Token token = tokens.get(0);
+
+        assertNotSame(input, "RULE_" + unexpectedTerminal, getTokenType(token));
     }
 
-     /**
+    /**
      * check that input is treated as a keyword by the grammar
-     * */
-    protected void testKeyword(String input) {
-      // the rule name for a keyword is usually
-      // the keyword enclosed in single quotes
-      String rule = new StringBuilder("'").append(input).append("'").toString();
-      testTerminal(input, rule);
+     */
+    protected void testKeyword(final String input) {
+        // the rule name for a keyword is usually
+        // the keyword enclosed in single quotes
+        final String rule = new StringBuilder("'").append(input).append("'")
+                .toString();
+        testTerminal(input, rule);
     }
 
     /**
      * check that input is not treated as a keyword by the grammar
-     * */
-    protected void testNoKeyword(String keyword) {
-      List<Token> tokens = getTokens(keyword);
-      assertEquals(keyword, 1, tokens.size());
-      String type = getTokenType(tokens.get(0));
-      assertFalse(keyword, type.charAt(0) == '\'');
+     */
+    protected void testNoKeyword(final String keyword) {
+        final List<Token> tokens = getTokens(keyword);
+        assertEquals(keyword, 1, tokens.size());
+        final String type = getTokenType(tokens.get(0));
+        assertFalse(keyword, type.charAt(0) == '\'');
     }
-    
 
-    protected String loadFileContents(String rootPath, String filename) {
-        URI uri = URI.createURI(resourceRoot + "/" + filename);
+    protected String loadFileContents(final String rootPath,
+            final String filename) {
+        final URI uri = URI.createURI(resourceRoot + "/" + filename);
         try {
-            InputStream is = resourceSet.getURIConverter().createInputStream(uri);
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            final InputStream is = resourceSet.getURIConverter()
+                    .createInputStream(uri);
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
             int i;
             while ((i = is.read()) >= 0) {
                 bos.write(i);
@@ -367,217 +398,234 @@ public abstract class XtextTest {
             is.close();
             bos.close();
             return bos.toString();
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
     }
-    protected Pair<String, FluentIssueCollection> loadAndSaveModule(String rootPath, String filename) {
-        URI uri = URI.createURI(resourceRoot + "/" + filename);
+
+    protected Pair<String, FluentIssueCollection> loadAndSaveModule(
+            final String rootPath, final String filename) {
+        final URI uri = URI.createURI(resourceRoot + "/" + filename);
         rootElement = loadModel(resourceSet, uri, getRootObjectType(uri));
 
-        Resource r = resourceSet.getResource(uri, false);
-        IResourceServiceProvider provider = serviceProviderRegistry
+        final Resource r = resourceSet.getResource(uri, false);
+        final IResourceServiceProvider provider = serviceProviderRegistry
                 .getResourceServiceProvider(r.getURI());
-        List<Issue> result = provider.getResourceValidator().validate(r,
+        final List<Issue> result = provider.getResourceValidator().validate(r,
                 CheckMode.ALL, null);
 
         if (invokeSerializer) {
-	        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-	        try {
-	        	Builder builder = SaveOptions.newBuilder();
-	        	if (formatOnSerialize) {
-	        		builder.format();
-	        	}
-				SaveOptions s = builder.getOptions();
-	        	
-				rootElement.eResource().save(bos, s.toOptionsMap());
-	        } catch (IOException e) {
-	            throw new RuntimeException(e);
-	        }
-	        
-	        return Tuples.create(bos.toString(), new FluentIssueCollection(r, result, new ArrayList<String>()));
+            final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            try {
+                final Builder builder = SaveOptions.newBuilder();
+                if (formatOnSerialize) {
+                    builder.format();
+                }
+                final SaveOptions s = builder.getOptions();
+
+                rootElement.eResource().save(bos, s.toOptionsMap());
+            } catch (final IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            return Tuples.create(bos.toString(), new FluentIssueCollection(r,
+                    result, new ArrayList<String>()));
         } else {
-        	return Tuples.create("-not serialized-", new FluentIssueCollection(r, result, new ArrayList<String>()));
+            return Tuples.create("-not serialized-", new FluentIssueCollection(
+                    r, result, new ArrayList<String>()));
         }
     }
 
     /**
      * Returns the expected type of the root element of the given resource.
      */
-    protected Class<? extends EObject> getRootObjectType(URI uri) {
-    	return null;
+    protected Class<? extends EObject> getRootObjectType(final URI uri) {
+        return null;
     }
 
-    public void setResourceRoot(String resourceRoot) {
+    public void setResourceRoot(final String resourceRoot) {
         this.resourceRoot = resourceRoot;
     }
 
     @SuppressWarnings("unchecked")
-    protected <T extends EObject> T loadModel(ResourceSet rs, URI uri, Class<T> clazz) {
-        Resource resource = rs.createResource(uri);
+    protected <T extends EObject> T loadModel(final ResourceSet rs,
+            final URI uri, final Class<T> clazz) {
+        final Resource resource = rs.createResource(uri);
         try {
             resource.load(null);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             throw new RuntimeException(e);
         }
-        
-        StringBuilder errors = new StringBuilder();
+
+        final StringBuilder errors = new StringBuilder();
         if (!resource.getWarnings().isEmpty()) {
-        	LOGGER.error("Resource " + uri.toString() + " has warnings:");
-            for (Resource.Diagnostic issue : resource.getWarnings()) {
-            	LOGGER.error(issue.getLine() + ": " + issue.getMessage());
+            LOGGER.error("Resource " + uri.toString() + " has warnings:");
+            for (final Resource.Diagnostic issue : resource.getWarnings()) {
+                LOGGER.error(issue.getLine() + ": " + issue.getMessage());
             }
             if (failOnParserWarnings) {
-	            errors.append("Resource as warnings:");
-	            for (Resource.Diagnostic issue : resource.getWarnings()) {
-	            	errors.append("\n  - " + issue.getLine() + ": " + issue.getMessage());
-	            }
-	            errors.append("/n");
+                errors.append("Resource as warnings:");
+                for (final Resource.Diagnostic issue : resource.getWarnings()) {
+                    errors.append("\n  - " + issue.getLine() + ": "
+                            + issue.getMessage());
+                }
+                errors.append("/n");
             }
-        }
-        
-        if (!resource.getErrors().isEmpty()) {
-        	LOGGER.error("Resource " + uri.toString() + " has errors:");
-            for (Resource.Diagnostic issue : resource.getErrors()) {
-            	LOGGER.error("    " + issue.getLine() + ": " + issue.getMessage());
-            }
-            
-            errors.append("Resource as errors:");
-            for (Resource.Diagnostic issue : resource.getErrors()) {
-            	errors.append("\n  - " + issue.getLine() + ": " + issue.getMessage());
-            }
-        }
-        
-        String failMessage = errors.toString();
-        if (!failMessage.equals("")){
-        	fail("\n\n" + failMessage + "\n");
         }
 
-        assertFalse("Resource has no content", resource.getContents().isEmpty());
-        EObject o = resource.getContents().get(0);
+        if (!resource.getErrors().isEmpty()) {
+            LOGGER.error("Resource " + uri.toString() + " has errors:");
+            for (final Resource.Diagnostic issue : resource.getErrors()) {
+                LOGGER.error(
+                        "    " + issue.getLine() + ": " + issue.getMessage());
+            }
+
+            errors.append("Resource as errors:");
+            for (final Resource.Diagnostic issue : resource.getErrors()) {
+                errors.append(
+                        "\n  - " + issue.getLine() + ": " + issue.getMessage());
+            }
+        }
+
+        final String failMessage = errors.toString();
+        if (!failMessage.equals("")) {
+            fail("\n\n" + failMessage + "\n");
+        }
+
+        assertFalse("Resource has no content",
+                resource.getContents().isEmpty());
+        final EObject o = resource.getContents().get(0);
         // assure that the root element is of the expected type
         if (clazz != null) {
-        	assertTrue(clazz.isInstance(o));
+            assertTrue(clazz.isInstance(o));
         }
         EcoreUtil.resolveAll(resource);
         return (T) o;
     }
 
-    protected void assertAllCrossReferencesResolvable(EObject obj) {
+    protected void assertAllCrossReferencesResolvable(final EObject obj) {
         boolean allIsGood = true;
-        TreeIterator<EObject> it = EcoreUtil2.eAll(obj);
+        final TreeIterator<EObject> it = EcoreUtil2.eAll(obj);
         while (it.hasNext()) {
-            EObject o = it.next();
-            for (EObject cr : o.eCrossReferences())
+            final EObject o = it.next();
+            for (final EObject cr : o.eCrossReferences()) {
                 if (cr.eIsProxy()) {
                     allIsGood = false;
-                    System.err.println("CrossReference from " + EmfFormatter.objPath(o) + " to "
-                            + ((InternalEObject) cr).eProxyURI() + " not resolved.");
+                    System.err.println("CrossReference from "
+                            + EmfFormatter.objPath(o) + " to "
+                            + ((InternalEObject) cr).eProxyURI()
+                            + " not resolved.");
                 }
+            }
         }
         if (!allIsGood) {
             fail("Unresolved cross references in " + EmfFormatter.objPath(obj));
         }
     }
-    
+
     protected void resetAssertedIssues() {
-		assertedIssues.clear();
-	}
-    
+        assertedIssues.clear();
+    }
+
     /**
-     * If called prior to #testFile, serialization will be performed, 
-     * but the result is not expected to exactly match the input file.
+     * If called prior to #testFile, serialization will be performed, but the
+     * result is not expected to exactly match the input file.
      */
-    protected void ignoreSerializationDifferences(){
-    	ensureIsBeforeTestFile();
-    	
-    	compareSerializedModelToInputFile = false;
+    protected void ignoreSerializationDifferences() {
+        ensureIsBeforeTestFile();
+
+        compareSerializedModelToInputFile = false;
     }
 
     /**
      * If called prior to #testFile, serialization won't be performed.
      */
-    protected void suppressSerialization(){
-    	ensureIsBeforeTestFile();
-    	
-    	compareSerializedModelToInputFile = false;
-    	invokeSerializer = false;
+    protected void suppressSerialization() {
+        ensureIsBeforeTestFile();
+
+        compareSerializedModelToInputFile = false;
+        invokeSerializer = false;
     }
-    
+
     /**
-     * If called prior to #testFile, parser warnings will be ignored.
-     * Errors will still be reported, though.
+     * If called prior to #testFile, parser warnings will be ignored. Errors
+     * will still be reported, though.
      */
-    protected void ignoreParserWarnings(){
-    	ensureIsBeforeTestFile();
-    	
-    	failOnParserWarnings = false;
+    protected void ignoreParserWarnings() {
+        ensureIsBeforeTestFile();
+
+        failOnParserWarnings = false;
     }
-    
+
     /**
-     * Serialization will occur without formatting, hence the
-     * input model must not comply to formatting rules in order
-     * to succeed.
+     * Serialization will occur without formatting, hence the input model must
+     * not comply to formatting rules in order to succeed.
      */
-    protected void ignoreFormattingDifferences(){
-    	ensureIsBeforeTestFile();
-    	
-    	formatOnSerialize = false;
+    protected void ignoreFormattingDifferences() {
+        ensureIsBeforeTestFile();
+
+        formatOnSerialize = false;
     }
-    
+
     /**
      * If called after to #testFile, the test wont fail for unasserted warnings.
      */
-    protected void ignoreUnassertedWarnings(){
-    	ensureIsAfterTestFile();
-    	
-    	// just treat the warnings left as asserted
-    	assertedIssues.addAll(issues.warningsOnly().except(assertedIssues).getIssues());
-    }
-	
-	/**
-	 * Text file comparison will ignore OS specific newlines by harmonizing expected and serialized
-	 * text with Unix style newline.  
-	 */
-	protected void ignoreOsSpecificNewline() {
-		this.ignoreOsSpecificNewline = true;
-	}
+    protected void ignoreUnassertedWarnings() {
+        ensureIsAfterTestFile();
 
-	protected void assertConstraints( FluentIssueCollection coll, String msg ) {
-		ensureIsAfterTestFile();
-		
-		assertedIssues.addAll(coll.getIssues());
-		Assert.assertTrue("failed "+msg+coll.getMessageString(), coll.evaluate() );
-	}
-	
-	protected void assertConstraints( FluentIssueCollection coll) {
-		ensureIsAfterTestFile();
-		
-		assertedIssues.addAll(coll.getIssues());
-		Assert.assertTrue("<no id> failed"+coll.getMessageString(), coll.evaluate() );
-	}
-	
-	protected void assertConstraints( String constraintID, FluentIssueCollection coll) {
-		ensureIsAfterTestFile();
-		
-		assertedIssues.addAll(coll.getIssues());
-		Assert.assertTrue(constraintID+" failed"+coll.getMessageString(), coll.evaluate() );
-	}
-	
-	public EObject getEObject( URI uri ) {
-		EObject eObject = issues.getResource().getEObject(uri.fragment());
-		if ( eObject.eIsProxy()) {
-			eObject = EcoreUtil.resolve(eObject, issues.getResource());
-		}
-		return eObject;
-	}	
-	
-	private void dumpUnassertedIssues() {
-		if ( issues.except(assertedIssues).getIssues().size() > 0 ) {
-			LOGGER.warn("---- Unasserted Issues ----");
-			for (Issue issue: issues.except(assertedIssues)) {
-				FluentIssueCollection.dumpIssue( issues.getResource(), issue );
-			}
-		}
-	}
+        // just treat the warnings left as asserted
+        assertedIssues.addAll(
+                issues.warningsOnly().except(assertedIssues).getIssues());
+    }
+
+    /**
+     * Text file comparison will ignore OS specific newlines by harmonizing
+     * expected and serialized text with Unix style newline.
+     */
+    protected void ignoreOsSpecificNewline() {
+        ignoreOsSpecificNewline = true;
+    }
+
+    protected void assertConstraints(final FluentIssueCollection coll,
+            final String msg) {
+        ensureIsAfterTestFile();
+
+        assertedIssues.addAll(coll.getIssues());
+        Assert.assertTrue("failed " + msg + coll.getMessageString(),
+                coll.evaluate());
+    }
+
+    protected void assertConstraints(final FluentIssueCollection coll) {
+        ensureIsAfterTestFile();
+
+        assertedIssues.addAll(coll.getIssues());
+        Assert.assertTrue("<no id> failed" + coll.getMessageString(),
+                coll.evaluate());
+    }
+
+    protected void assertConstraints(final String constraintID,
+            final FluentIssueCollection coll) {
+        ensureIsAfterTestFile();
+
+        assertedIssues.addAll(coll.getIssues());
+        Assert.assertTrue(constraintID + " failed" + coll.getMessageString(),
+                coll.evaluate());
+    }
+
+    public EObject getEObject(final URI uri) {
+        EObject eObject = issues.getResource().getEObject(uri.fragment());
+        if (eObject.eIsProxy()) {
+            eObject = EcoreUtil.resolve(eObject, issues.getResource());
+        }
+        return eObject;
+    }
+
+    private void dumpUnassertedIssues() {
+        if (issues.except(assertedIssues).getIssues().size() > 0) {
+            LOGGER.warn("---- Unasserted Issues ----");
+            for (final Issue issue : issues.except(assertedIssues)) {
+                FluentIssueCollection.dumpIssue(issues.getResource(), issue);
+            }
+        }
+    }
 }
