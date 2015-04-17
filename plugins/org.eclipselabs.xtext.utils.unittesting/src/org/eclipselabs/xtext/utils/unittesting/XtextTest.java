@@ -46,13 +46,12 @@ import org.eclipse.xtext.util.Tuples;
 import org.eclipse.xtext.validation.CheckMode;
 import org.eclipse.xtext.validation.Issue;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
-
-import junit.framework.Assert;
 
 /**
  * <p>
@@ -113,7 +112,7 @@ public abstract class XtextTest {
 
     public XtextTest(final String resourceRoot) {
         /*
-         * Classpath resuolution is weird
+         * Classpath resolution is weird
          *
          * For resources directly in the classpath, you need a starting slash
          * after 'classpath:/': - classpath://bla.txt
