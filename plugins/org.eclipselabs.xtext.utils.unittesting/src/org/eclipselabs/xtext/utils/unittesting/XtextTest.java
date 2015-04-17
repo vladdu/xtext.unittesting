@@ -2,7 +2,6 @@ package org.eclipselabs.xtext.utils.unittesting;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -115,13 +114,13 @@ public abstract class XtextTest {
     public XtextTest(final String resourceRoot) {
         /*
          * Classpath resuolution is weird
-         * 
+         *
          * For resources directly in the classpath, you need a starting slash
          * after 'classpath:/': - classpath://bla.txt
-         * 
+         *
          * But if you wan't to point to something in a subfolder, the subfolder
          * must occur directly after 'classpath:/': - classpath://subfolder
-         * 
+         *
          * A trailing slash is optional.
          */
         if (!resourceRoot.contains(":/")) {
@@ -360,7 +359,8 @@ public abstract class XtextTest {
         final List<Token> tokens = getTokens(input);
         final Token token = tokens.get(0);
 
-        assertNotSame(input, "RULE_" + unexpectedTerminal, getTokenType(token));
+        assertFalse(input,
+                getTokenType(token).equals("RULE_" + unexpectedTerminal));
     }
 
     /**
