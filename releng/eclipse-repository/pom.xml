@@ -14,7 +14,7 @@
 
 	<properties>
 		<!-- The name of your own Bintray repository -->
-		<bintray.repo>p2-composite-example</bintray.repo>
+		<bintray.repo>xtext-testing</bintray.repo>
 		<!-- The name of your own Bintray repository's package for releases -->
 		<bintray.package>releases</bintray.package>
 		<!-- The label for the Composite sites -->
