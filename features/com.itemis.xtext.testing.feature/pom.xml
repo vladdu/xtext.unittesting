@@ -3,9 +3,9 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.eclipselabs.xtext.utils</groupId>
+		<groupId>com.itemis.xtext.testing</groupId>
 		<version>0.9.3</version>
-		<artifactId>unittesting-parent</artifactId>
+		<artifactId>parent</artifactId>
 		<relativePath>../../releng/pom.xml</relativePath>
 	</parent>
 	
