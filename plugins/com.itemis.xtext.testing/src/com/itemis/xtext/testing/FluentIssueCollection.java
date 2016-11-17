@@ -1,10 +1,10 @@
-package org.eclipselabs.xtext.utils.unittesting;
+package com.itemis.xtext.testing;
 
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.ancestor;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.eString;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.egetAndResolve;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.getEObject;
-import static org.eclipselabs.xtext.utils.unittesting.XtextUtils.name;
+import static com.itemis.xtext.testing.XtextUtils.ancestor;
+import static com.itemis.xtext.testing.XtextUtils.eString;
+import static com.itemis.xtext.testing.XtextUtils.egetAndResolve;
+import static com.itemis.xtext.testing.XtextUtils.getEObject;
+import static com.itemis.xtext.testing.XtextUtils.name;
 
 import java.util.ArrayList;
 import java.util.Arrays;

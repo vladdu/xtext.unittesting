@@ -1,4 +1,4 @@
-package org.eclipselabs.xtext.utils.unittesting;
+package com.itemis.xtext.testing;
 
 import org.eclipse.xtext.junit4.IInjectorProvider;
 import org.eclipse.xtext.junit4.IRegistryConfigurator;

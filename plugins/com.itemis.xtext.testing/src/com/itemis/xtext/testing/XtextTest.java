@@ -1,4 +1,4 @@
-package org.eclipselabs.xtext.utils.unittesting;
+package com.itemis.xtext.testing;
 
 import org.eclipse.emf.mwe.utils.StandaloneSetup;
 import org.junit.BeforeClass;

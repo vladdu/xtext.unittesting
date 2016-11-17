@@ -1,4 +1,4 @@
-package org.eclipselabs.xtext.utils.unittesting;
+package com.itemis.xtext.testing;
 
 import java.util.ArrayList;
 import java.util.List;
