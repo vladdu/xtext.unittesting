@@ -42,5 +42,5 @@ public class DomainmodelUiModule extends AbstractDomainmodelUiModule {
 	public void configureFilterOperationsOutlineContribution(Binder binder) {
 		binder.bind(IOutlineContribution.class).annotatedWith(Names.named("FilterOperationsContribution")).to(FilterOperationsContribution.class);
 	} 
-
+	
 }

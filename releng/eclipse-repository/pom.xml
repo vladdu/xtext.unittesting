@@ -18,7 +18,7 @@
 		<!-- The name of your own Bintray repository's package for releases -->
 		<bintray.package>releases</bintray.package>
 		<!-- The label for the Composite sites -->
-		<site.label>Composite Site Example</site.label>
+		<site.label>xtext-testing composite repository</site.label>
 
 		<!-- If the Bintray repository is owned by someone different from your 
 			user, then specify the bintray.owner explicitly -->
