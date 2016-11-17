@@ -24,11 +24,11 @@ xtext.unittesting provides the base class XtextTest with which you can
 ## Usage
 By default, XtextTest searches for models on the classpath. So just put it either beside your unit-test in the java-folder or create a folder added as resource folder where you put your test-models. Consider adding a folder named like the test-class wich then contains all tested models.
 
-Add a dependency to plugin org.eclipselabs.xtext.utils.unittesting in MANIFEST.MF
-Derive your test class from org.eclipselabs.xtext.utils.unittesting.XtextTest
+Add a dependency to plugin `com.itemis.xtext.testing` in `MANIFEST.MF`.
+Derive your test class from `com.itemis.xtext.testing.XtextTest`.
 
-Add @RunWith(XtextRunner.class) as class annotation
-Add @InjectWith(<MyDsl>InjectorProvider.class) as class annotation. Xtext will generate an implementation of IInjectorProvider for your DSL.
+Add `@RunWith(XtextRunner.class)` as class annotation
+Add `@InjectWith(<MyDsl>InjectorProvider.class)` as class annotation. Xtext will generate an implementation of `IInjectorProvider` for your DSL.
 
 ```java
 @RunWith(XtextRunner2.class)
@@ -43,15 +43,15 @@ public class ModelFileTest extends XtextTest {
 ### integration-style model testing
 The most basic thing you can do is parse a model file and assure it is both valid when read and correctly serialized. Invoke the testFile method with a path to your model file (relative to classpath root).
 
-We use the domainmodel example shipped with xtext to demonstrate the capabilities of the test framework. It is also checked in under http://svn.codespot.com/a/eclipselabs.org/xtext-utils/subprojects/unittesting/trunk/examples.
+We use the domainmodel example shipped with xtext to demonstrate the capabilities of the test framework. It is also checked in under [https://github.com/itemis/xtext-testing/tree/master/examples]().
 
-Model file resources/ModelFileTest/person_no_attributes.dmodel:
+Model file [`resources/ModelFileTest/person_no_attributes.dmodel`](https://raw.githubusercontent.com/itemis/xtext-testing/master/examples/org.eclipse.xtext.example.domainmodel.tests/resources/ModelFileTest/person_no_attributes.dmodel):
 
 ```
 entity Person { }
 ```
 
-Test class org.eclipse.xtext.example.domainmodel.tests.ModelFileTest:
+Test class [`ModelFileTest`](https://github.com/itemis/xtext-testing/blob/master/examples/org.eclipse.xtext.example.domainmodel.tests/src/org/eclipse/xtext/example/domainmodel/tests/ModelFileTest.java):
 
 ```java
 @RunWith(XtextRunner2.class)
@@ -79,12 +79,13 @@ This test method will fail when
 
 If your model has cross references to model elements from external model elements you, these model files must be passed as additional arguments for the testFile() method.
 
-Consider this example person2_extends_person.dmodel:
+Consider this example [`person2_extends_person.dmodel`](https://raw.githubusercontent.com/itemis/xtext-testing/master/examples/org.eclipse.xtext.example.domainmodel.tests/resources/ModelFileTest/person2_extends_person.dmodel):
+
 ```
 entity Person2 extends Person { }
 ```
 
-To successfully parse testcase02.dmodel the reference to the supertype Person must be resolved, which is defined in testcase01.dmodel.
+To successfully parse `testcase02.dmodel` the reference to the supertype `Person` must be resolved, which is defined in `testcase01.dmodel`.
 
 The test method looks like this:
 
@@ -112,6 +113,7 @@ assertConstraints(
 
 ### Unit-style grammar testing
 In order to test this grammar snippet:
+
 ```
 // from Xbase.xtext
 QualifiedName:
@@ -173,13 +175,20 @@ Sometimes you may need to ignore problems or disable some of the tested features
 The appropriate place will be most likely a @Before annotated method, but sometimes in a test method before invoking `testFile()`.
 
 ## Troubleshooting
-Error message "Content is not allowed in prolog."
+
+**Error message "Content is not allowed in prolog."**
+
 Xtext 2.0.1 introduced a bug that leads to deregistration of the resource factory after the first test.
+```
 java.lang.RuntimeException: org.eclipse.emf.ecore.resource.Resource$IOWrappedException: Content is not allowed in prolog.
-Solution: Use @RunWith(XtextRunner2.class) (instead of XtextRunner.class). Version 0.9.2 or above is required to have this class. Read also this forum posting if you have further trouble
-Model files under test not found:
+```
+
+Solution: Use `@RunWith(XtextRunner2.class)` (instead of `XtextRunner.class`). Version 0.1.0 or above is required to have this class. 
+
+**Model files under test not found:**
+
 The model files must be available on the project's classpath. The framework tries to load the files with a classpath URI. Usually it is a good idea to create a Java source folder "model" into which you put the model files under test.
 
 ## More Information
 
-Blog Post: "Eclipse Labs Xtext Utils: Unit Testing helpers released"
+Blog Post: ["Eclipse Labs Xtext Utils: Unit Testing helpers released"](https://startbigthinksmall.wordpress.com/2011/08/01/eclipse-labs-xtext-utils-unit-testing-helpers-released/)
