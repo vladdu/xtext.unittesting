@@ -9,5 +9,6 @@
 			<attribute name="ignore_optional_problems" value="true"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="resources"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
