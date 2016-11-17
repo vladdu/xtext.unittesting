@@ -6,3 +6,5 @@ bin
 *.plugin.xml_gen
 *.versionsBackup
 *.bak
+src-gen
+xtend-gen
