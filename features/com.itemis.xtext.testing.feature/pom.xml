@@ -9,6 +9,6 @@
 		<relativePath>../../releng/pom.xml</relativePath>
 	</parent>
 	
-	<artifactId>org.eclipselabs.xtext.utils.unittesting.feature</artifactId>
+	<artifactId>com.itemis.xtext.testing.feature</artifactId>
 	<packaging>eclipse-feature</packaging>
 </project>

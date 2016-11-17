@@ -15,8 +15,8 @@
 	<packaging>pom</packaging>
 		
 	<modules>
-		<module>../plugins/org.eclipselabs.xtext.utils.unittesting</module>
-		<module>../features/org.eclipselabs.xtext.utils.unittesting.feature</module>
+		<module>../plugins/com.itemis.xtext.testing</module>
+		<module>../features/com.itemis.xtext.testing.feature</module>
 		<module>./eclipse-repository</module>
 	</modules>
 

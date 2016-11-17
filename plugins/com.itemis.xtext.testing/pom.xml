@@ -9,6 +9,6 @@
 		<relativePath>../../releng/pom.xml</relativePath>
 	</parent>
 
-	<artifactId>org.eclipselabs.xtext.utils.unittesting</artifactId>
+	<artifactId>com.itemis.xtext.testing</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>

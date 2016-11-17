@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.eclipselabs.xtext.utils.unittesting.feature"
+      id="com.itemis.xtext.testing.feature"
       label="Eclipse Labs Xtext Testing Utilities"
       version="0.9.3.qualifier">
 
@@ -21,13 +21,13 @@
    </url>
 
    <plugin
-         id="org.eclipselabs.xtext.utils.unittesting"
+         id="com.itemis.xtext.testing"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
    <plugin
-         id="org.eclipselabs.xtext.utils.unittesting.source"
+         id="com.itemis.xtext.testing.source"
          download-size="0"
          install-size="0"
          version="0.0.0"
