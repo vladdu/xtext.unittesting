@@ -17,7 +17,7 @@
    </license>
 
    <url>
-      <update label="Eclipse Labs Xtext Utils Update Site" url="http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x"/>
+      <update label="Xtext Testing repository" url="http://xtext-utils.eclipselabs.org.codespot.com/git.distribution/releases/unittesting-0.9.x"/>
    </url>
 
    <plugin
@@ -26,11 +26,4 @@
          install-size="0"
          version="0.0.0"
          unpack="false"/>
-   <plugin
-         id="com.itemis.xtext.testing.source"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
 </feature>
