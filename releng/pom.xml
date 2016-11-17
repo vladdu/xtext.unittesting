@@ -10,7 +10,7 @@
 	</parent>
 
 	<groupId>com.itemis.xtext.testing</groupId>
-	<version>0.9.3</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<artifactId>parent</artifactId>
 	<packaging>pom</packaging>
 
