@@ -20,7 +20,7 @@
 
 		<!-- If the Bintray repository is owned by someone different from your 
 			user, then specify the bintray.owner explicitly -->
-		<bintray.owner>${bintray.user}</bintray.owner>
+		<bintray.owner>itemis</bintray.owner>
 		<!-- Define bintray.user and bintray.apikey in some secret place, like 
 			.m2/settings.xml -->
 
