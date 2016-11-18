@@ -12,9 +12,9 @@
 
 	<properties>
 		<!-- The name of your own Bintray repository -->
-		<bintray.repo>xtext-testing</bintray.repo>
+		<bintray.repo>generic</bintray.repo>
 		<!-- The name of your own Bintray repository's package for releases -->
-		<bintray.package>releases</bintray.package>
+		<bintray.package>xtext-testing</bintray.package>
 		<!-- The label for the Composite sites -->
 		<site.label>xtext-testing composite repository</site.label>
 
@@ -25,9 +25,9 @@
 			.m2/settings.xml -->
 
 		<!-- Default values for remote directories -->
-		<bintray.releases.path>xtext-testing/releases</bintray.releases.path>
-		<bintray.composite.path>xtext-testing/updates</bintray.composite.path>
-		<bintray.zip.path>xtext-testing/zipped</bintray.zip.path>
+		<bintray.releases.path>releases</bintray.releases.path>
+		<bintray.composite.path>updates</bintray.composite.path>
+		<bintray.zip.path>zipped</bintray.zip.path>
 		<!-- note that the following must be consistent with the path schema used 
 			to publish child composite repositories and actual released p2 repositories -->
 		<child.repository.path.prefix>../../releases/</child.repository.path.prefix>
