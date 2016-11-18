@@ -5,7 +5,7 @@ For all non trivial DSLs it is important to develop them test driven, otherwise 
 In the examples below we will use the Domainmodel Example for testing. This example can be installed with the project wizard.
 
 ## Installation
-not available yet from here
+https://dl.bintray.com/itemis/generic/xtext-testing/updates/
 
 ## Testing DSL files
 
