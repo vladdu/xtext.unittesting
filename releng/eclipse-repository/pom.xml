@@ -27,9 +27,9 @@
 			.m2/settings.xml -->
 
 		<!-- Default values for remote directories -->
-		<bintray.releases.path>releases</bintray.releases.path>
-		<bintray.composite.path>updates</bintray.composite.path>
-		<bintray.zip.path>zipped</bintray.zip.path>
+		<bintray.releases.path>xtext-testing/releases</bintray.releases.path>
+		<bintray.composite.path>xtext-testing/updates</bintray.composite.path>
+		<bintray.zip.path>xtext-testing/zipped</bintray.zip.path>
 		<!-- note that the following must be consistent with the path schema used 
 			to publish child composite repositories and actual released p2 repositories -->
 		<child.repository.path.prefix>../../releases/</child.repository.path.prefix>
@@ -82,7 +82,7 @@
 								<!-- Deploy p2 repository, p2 composite updated metadata and zipped 
 									p2 repository -->
 								<id>deploy-repository</id>
-								<phase>verify</phase>
+								<phase>deploy</phase>
 								<configuration>
 									<target>
 										<ant antfile="${basedir}/bintray.ant" target="push-to-bintray">
