@@ -15,5 +15,5 @@
 <stringAttribute key="org.eclipse.debug.core.ATTR_REFRESH_SCOPE" value="${working_set:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;&#10;&lt;resources&gt;&#10;&lt;item path=&quot;/com.itemis.xtext.testing&quot; type=&quot;4&quot;/&gt;&#10;&lt;item path=&quot;/com.itemis.xtext.testing.feature&quot; type=&quot;4&quot;/&gt;&#10;&lt;item path=&quot;/com.itemis.xtext.testing.releng&quot; type=&quot;4&quot;/&gt;&#10;&lt;/resources&gt;}"/>
 <booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_START_ON_FIRST_THREAD" value="true"/>
 <stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-DnewVersion=${string_prompt:new version}-SNAPSHOT"/>
-<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:xtext-testing}/releng"/>
+<stringAttribute key="org.eclipse.jdt.launching.WORKING_DIRECTORY" value="${project_loc:xtext-testing}"/>
 </launchConfiguration>

@@ -6,7 +6,7 @@
 		<groupId>com.itemis.xtext.testing</groupId>
 		<version>0.1.0-SNAPSHOT</version>
 		<artifactId>parent</artifactId>
-		<relativePath>../../releng/pom.xml</relativePath>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 	
 	<artifactId>com.itemis.xtext.testing.feature</artifactId>
