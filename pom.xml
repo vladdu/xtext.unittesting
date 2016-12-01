@@ -33,6 +33,14 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>2.10.4</version>
+					<configuration>
+						<failOnError>false</failOnError>
+					</configuration>
+				</plugin>
+				<plugin>
 					<groupId>com.itemis.maven.plugins</groupId>
 					<artifactId>unleash-maven-plugin</artifactId>
 					<version>2.2.2</version>
