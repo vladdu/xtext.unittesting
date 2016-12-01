@@ -1,1 +1,2 @@
-entity Person2 extends Person { }
+entity Person2 extends Person {
+}

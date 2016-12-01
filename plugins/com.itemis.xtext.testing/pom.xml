@@ -1,14 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>org.eclipselabs.xtext.utils</groupId>
-		<version>0.9.3</version>
-		<artifactId>unittesting-parent</artifactId>
-		<relativePath>../../releng/pom.xml</relativePath>
+		<groupId>com.itemis.xtext.testing</groupId>
+		<version>0.1.0-SNAPSHOT</version>
+		<artifactId>parent</artifactId>
+		<relativePath>../../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>org.eclipselabs.xtext.utils.unittesting</artifactId>
+	<artifactId>com.itemis.xtext.testing</artifactId>
 	<packaging>eclipse-plugin</packaging>
 </project>

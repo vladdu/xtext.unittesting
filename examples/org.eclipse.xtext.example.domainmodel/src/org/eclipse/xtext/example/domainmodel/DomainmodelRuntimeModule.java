@@ -7,17 +7,23 @@
  *******************************************************************************/
 package org.eclipse.xtext.example.domainmodel;
 
-import org.eclipse.xtext.conversion.IValueConverterService;
-import org.eclipse.xtext.example.domainmodel.valueconverter.DomainmodelValueConverterService;
+import org.eclipse.xtext.findReferences.TargetURICollector;
+import org.eclipse.xtext.resource.persistence.IResourceStorageFacade;
+import org.eclipse.xtext.xbase.jvmmodel.JvmModelTargetURICollector;
+import org.eclipse.xtext.xbase.resource.BatchLinkableResourceStorageFacade;
+
 
 /**
  * used to register components to be used within the IDE.
  */
 public class DomainmodelRuntimeModule extends AbstractDomainmodelRuntimeModule {
 	
-	@Override
-	public Class<? extends IValueConverterService> bindIValueConverterService() {
-		return DomainmodelValueConverterService.class;
+	public Class<? extends IResourceStorageFacade> bindResourceStorageFacade() {
+		return BatchLinkableResourceStorageFacade.class;
 	}
-	
+
+	public Class<? extends TargetURICollector> bindTargetURICollector() {
+		return JvmModelTargetURICollector.class;
+	}
+
 }

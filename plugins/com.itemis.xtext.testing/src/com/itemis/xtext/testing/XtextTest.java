@@ -23,6 +23,10 @@ import org.junit.BeforeClass;
  */
 public abstract class XtextTest extends XtextTestBase {
 
+    public XtextTest() {
+        super();
+    }
+
     public XtextTest(String uri) {
         super(uri);
     }
