@@ -58,7 +58,7 @@ import com.google.inject.Inject;
  * </p>
  *
  * <p>
- * {@see XtextTest} offers integration testing of model files (load, validate,
+ * <code>XtextTestBase</code> offers integration testing of model files (load, validate,
  * serialize, compare) as well as very specific unit-style testing for
  * terminals, keywords and parser rules.
  * </p>
@@ -67,6 +67,7 @@ import com.google.inject.Inject;
  * @author Lars Corneliussen
  * @author Markus Voelter
  * @author Alexander Nittka
+ * @author Vlad Dumitrescu
  *
  */
 public abstract class XtextTestBase {

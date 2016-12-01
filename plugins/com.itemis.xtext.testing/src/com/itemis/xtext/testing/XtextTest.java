@@ -10,7 +10,7 @@ import org.junit.BeforeClass;
  * </p>
  *
  * <p>
- * {@see XtextTest} offers integration testing of model files (load, validate,
+ * <code>XtextTest</code> offers integration testing of model files (load, validate,
  * serialize, compare) as well as very specific unit-style testing for
  * terminals, keywords and parser rules.
  * </p>
@@ -19,6 +19,7 @@ import org.junit.BeforeClass;
  * @author Lars Corneliussen
  * @author Markus Voelter
  * @author Alexander Nittka
+ * @author Vlad Dumitrescu
  *
  */
 public abstract class XtextTest extends XtextTestBase {

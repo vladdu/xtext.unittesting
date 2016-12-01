@@ -27,7 +27,8 @@ import com.google.common.collect.Iterables;
  * Errors).
  *
  * @author Markus Voelter - Initial Contribution and API
- *
+ * @author Karsten Thoms
+ * @author Lars Corneliussen
  */
 public class FluentIssueCollection implements Iterable<Issue> {
 

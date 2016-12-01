@@ -15,13 +15,12 @@ import org.eclipse.xtext.validation.Issue;
 
 /**
  * <p>
- * Utilities for XText supporting the IssueCollection
- * </p>
- * <p>
- * TODO: This class should be available in a more generic package
+ * Utilities for Xtext supporting the IssueCollection
  * </p>
  *
- * @author Markus Voelter - Initial Contribution and API
+ * @author Karsten Thoms
+ * @author Lars Corneliussen
+ * @author Vlad Dumitrescu
  *
  */
 public class XtextUtils {
