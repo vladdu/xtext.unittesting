@@ -2,7 +2,7 @@
 <feature
       id="com.itemis.xtext.testing.feature"
       label="Xtext Testing Framework"
-      version="0.2.0">
+      version="0.2.0.qualifier">
 
    <description url="http://code.google.com/a/eclipselabs.org/p/xtext-utils/wiki/Unit_Testing">
       Base test fixtures and helper classes for testing Xtext-based DSLs.
